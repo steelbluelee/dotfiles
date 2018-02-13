@@ -3,3 +3,4 @@ cp ~/.config/nvim/init.vim ~/backup/dotfiles/
 cp ~/.bashrc ~/backup/dotfiles/bash.rc
 cp ~/.tmux.conf ~/backup/dotfiles/tmux.conf
 cp ~/.vimrc ~/backup/dotfiles/vim.rc
+cp ~/.sbt/1.0/plugins/plugins.sbt ~/backup/dotfiles/plugins.sbt
