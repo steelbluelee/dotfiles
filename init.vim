@@ -8,8 +8,9 @@ call plug#begin('~/.nvim/vim-plug')
 Plug 'https://github.com/scrooloose/nerdtree'
 Plug 'https://github.com/skywind3000/asyncrun.vim'
 Plug 'https://github.com/vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'https://github.com/tpope/vim-fugitive'
-Plug 'https://github.com/christoomey/vim-tmux-navigator'
+" Plug 'https://github.com/christoomey/vim-tmux-navigator'
 Plug 'https://github.com/airblade/vim-gitgutter'
 Plug 'https://github.com/benmills/vimux'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -103,11 +104,11 @@ nnoremap O :set noimd<CR>O
 filetype plugin on
 
 " Status Lines -> airline 사용
-set laststatus=2
-if has("statusline")
- set statusline=%<%f\ %h%m%r%=[%{\"\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"\\"}:%y]%k\ %-14.(%l,%c/%L%)
- set statusline=%<%f\ %h%m%r%=%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%y%k\ %-14.(%l,%c/%L%)
-endif
+" set laststatus=2
+" if has("statusline")
+"  set statusline=%<%f\ %h%m%r%=[%{\"\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"\\"}:%y]%k\ %-14.(%l,%c/%L%)
+"  set statusline=%<%f\ %h%m%r%=%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%y%k\ %-14.(%l,%c/%L%)
+" endif
 
 " 경고 소리와 경고 화면 깜빡임을 끈다.
 " set visualbell
@@ -119,10 +120,10 @@ autocmd GUIEnter * set visualbell t_vb=
 """""""""""""""""""""""""""""""""""""""""""""""
 " 윈도우 네비게이션 키 매핑
 " vim-tmux-navigator 설정과 충돌함
-" noremap <C-h> <C-w>h
-" noremap <C-j> <C-w>j
-" noremap <C-k> <C-w>k
-" noremap <C-l> <C-w>l
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
 
 " H, L 라인의 첫번째 컬럼, 마지막 컬럼
 nnoremap H 0
@@ -327,11 +328,22 @@ endfunction
 
 " airline                                    {{{
 " """"""""""""""""""""""""""""""""""""""""""""""
-let g:airline_left_sep = '▸'
-let g:airline_right_sep = '◂'
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+" let g:airline_left_sep = '▸'
+" let g:airline_right_sep = '◂'
 " let g:airline_right_sep = '◀'
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+let g:airline_theme='sol'
 " }}}
 
 " AsyncRun 설정                              {{{
@@ -509,6 +521,7 @@ augroup END
 
 " fzf                                         {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <leader>/f :Files<cr>
-nnoremap <leader>/l :Lines<cr>
+nnoremap <C-x>ff :Files<cr>
+nnoremap <C-x>fl :Lines<cr>
+nnoremap <C-x>fb :BLines<cr>
 " }}}
