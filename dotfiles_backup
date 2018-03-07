@@ -1,8 +1,9 @@
 #!/bin/bash
-cp ~/.config/nvim/init.vim ~/backup/dotfiles/
+cp ~/.config/nvim/init.vim ~/backup/dotfiles/init.vim
 cp ~/.bashrc ~/backup/dotfiles/bash.rc
 cp ~/.tmux.conf ~/backup/dotfiles/tmux.conf
 cp ~/.tmux.conf.local ~/backup/dotfiles/tmux.conf.local
 cp ~/.vimrc ~/backup/dotfiles/vim.rc
 cp ~/.sbt/1.0/plugins/plugins.sbt ~/backup/dotfiles/plugins.sbt
+cp ~/.sbt/1.0/build.sbt ~/backup/dotfiles/build.sbt
 cp ~/.config/fish/config.fish ~/backup/dotfiles/config.fish

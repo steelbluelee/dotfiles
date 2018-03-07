@@ -340,10 +340,11 @@ let g:airline_right_sep = ''
 let g:airline_right_alt_sep = ''
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline#extensions#tabline#left_sep = ' '
+" let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
-let g:airline_theme='sol'
+let g:airline_theme='murmur'
 " }}}
 
 " AsyncRun 설정                              {{{
@@ -428,6 +429,7 @@ let g:NERDTrimTrailingWhitespace = 1
 
 " Prompt for a command to run
 nnoremap <Leader>vp :VimuxPromptCommand<CR>
+nnoremap <C-s>c :VimuxPromptCommand<CR>
 
 " Run last command executed by VimuxRunCommand
 nnoremap <Leader>vl :VimuxRunLastCommand()<CR>
@@ -453,12 +455,17 @@ function! VimuxSlime()
       call VimuxSendText(@v)
       call VimuxSendKeys("Enter")
 endfunction
-vnoremap <Leader>vs "vy :call VimuxSlime()<CR>:call VimuxZoomRunner()<CR>
+
+vnoremap <Leader>vs "vy :call VimuxSlime()<CR>
+" vnoremap <Leader>vs "vy :call VimuxSlime()<CR>:call VimuxZoomRunner()<CR>
+
+nnoremap <C-s>b vip"vy:call VimuxSlime()<CR>
+nnoremap <C-s>f ggVG"vy:call VimuxSlime()<CR>
 
 let g:VimuxHeight = "5"
 
-" let g:VimuxRunnerType = "pane"
-let g:VimuxRunnerType = "window"
+let g:VimuxRunnerType = "pane"
+" let g:VimuxRunnerType = "window"
 " }}}
 
 "  tagbar 설정                                {{{
