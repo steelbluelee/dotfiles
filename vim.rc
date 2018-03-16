@@ -1,16 +1,59 @@
+" $HOME/.config/nvim/init.vim
+
+" vim-plug : vim plugins                 {{{
+""""""""""""""""""""""""""""""""""""""""""""""""
+call plug#begin('~/.vim/vim-plug')
+
+" common
+Plug 'https://github.com/scrooloose/nerdtree'
+Plug 'https://github.com/skywind3000/asyncrun.vim'
+Plug 'https://github.com/vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'https://github.com/tpope/vim-fugitive'
+" Plug 'https://github.com/christoomey/vim-tmux-navigator'
+Plug 'https://github.com/airblade/vim-gitgutter'
+Plug 'https://github.com/benmills/vimux'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+
+" colors
+Plug 'https://github.com/altercation/vim-colors-solarized'
+Plug 'https://github.com/vim-scripts/wombat256.vim'
+
+" programming
+Plug 'https://github.com/honza/vim-snippets'
+Plug 'https://github.com/Yggdroot/indentLine'
+Plug 'https://github.com/Raimondi/delimitMate'
+Plug 'https://github.com/majutsushi/tagbar'
+Plug 'https://github.com/ervandew/supertab'
+Plug 'https://github.com/SirVer/ultisnips'
+" Plug 'https://github.com/Shougo/neocomplete.vim'
+Plug 'https://github.com/scrooloose/nerdcommenter'
+Plug 'https://github.com/neomake/neomake'
+
+" languages
+" Plug 'ensime/ensime-vim' => for vim not neovim
+" scala
+Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
+Plug 'https://github.com/derekwyatt/vim-scala'
+Plug 'https://github.com/ktvoelker/sbt-vim'
+
+call plug#end()
+"  }}}
+
 " VI 기본 설정                               {{{
 """"""""""""""""""""""""""""""""""""""""""""""""
 
 set t_Co=256
 
-" colorscheme wombat256mod
+colorscheme wombat256mod
 " colorscheme pyte
 " colorscheme summerfruit256
 " colorscheme nuvola
 " colorscheme oceanlight
 " colorscheme buttercream
 set background=light
-colorscheme solarized
+" colorscheme solarized
 
 " <leader> key를 ,로 변경
 let mapleader=","
@@ -60,11 +103,11 @@ nnoremap O :set noimd<CR>O
 filetype plugin on
 
 " Status Lines -> airline 사용
-set laststatus=2
-if has("statusline")
- set statusline=%<%f\ %h%m%r%=[%{\"\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"\\"}:%y]%k\ %-14.(%l,%c/%L%)
- set statusline=%<%f\ %h%m%r%=%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%y%k\ %-14.(%l,%c/%L%)
-endif
+" set laststatus=2
+" if has("statusline")
+"  set statusline=%<%f\ %h%m%r%=[%{\"\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"\\"}:%y]%k\ %-14.(%l,%c/%L%)
+"  set statusline=%<%f\ %h%m%r%=%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%y%k\ %-14.(%l,%c/%L%)
+" endif
 
 " 경고 소리와 경고 화면 깜빡임을 끈다.
 " set visualbell
@@ -76,10 +119,10 @@ autocmd GUIEnter * set visualbell t_vb=
 """""""""""""""""""""""""""""""""""""""""""""""
 " 윈도우 네비게이션 키 매핑
 " vim-tmux-navigator 설정과 충돌함
-" noremap <C-h> <C-w>h
-" noremap <C-j> <C-w>j
-" noremap <C-k> <C-w>k
-" noremap <C-l> <C-w>l
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
 
 " H, L 라인의 첫번째 컬럼, 마지막 컬럼
 nnoremap H 0
@@ -182,8 +225,8 @@ augroup END
 
 " key binding and sourcing for opening vimrcfile
 " vimrc 파일 열기 & 적용
-nnoremap <leader>ev :e $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>ev :e ~/.config/nvim/init.vim<cr>
+nnoremap <leader>sv :source ~/.config/nvim/init.vim<cr>
 " }}}
 
 " 들여쓰기, 탭 : indentation, Tab 설정       {{{
@@ -284,11 +327,23 @@ endfunction
 
 " airline                                    {{{
 " """"""""""""""""""""""""""""""""""""""""""""""
-let g:airline_left_sep = '▸'
-let g:airline_right_sep = '◂'
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+" let g:airline_left_sep = '▸'
+" let g:airline_right_sep = '◂'
 " let g:airline_right_sep = '◀'
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
+" let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+let g:airline_theme='murmur'
 " }}}
 
 " AsyncRun 설정                              {{{
@@ -306,12 +361,22 @@ nnoremap <leader>n :NERDTreeToggle<CR>
 "  neocomplete 설정                           {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
 " enable
-    let g:neocomplete#enable_at_startup = 1
+"    let g:neocomplete#enable_at_startup = 1
+" }}}
+
+"  deoplete 설정                           {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources = {}
+let g:deoplete#sources.scala = ['buffer', 'tags', 'omni']
+let g:deoplete#omni#input_patterns = {}
+let g:deoplete#omni#input_patterns.scala = ['[^. *\t0-9]\.\w*',': [A-Z]\w', '[\[\t\( ][A-Za-z]\w*']
 " }}}
 
 " supertab settings                          {{{
 " """"""""""""""""""""""""""""""""""""""""""""""
-let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+" let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
 " let g:SuperTabDefaultCompletionType = '<c-x><c-u>'
 " let g:SuperTabDefaultCompletionType = 'context'
 
@@ -363,6 +428,7 @@ let g:NERDTrimTrailingWhitespace = 1
 
 " Prompt for a command to run
 nnoremap <Leader>vp :VimuxPromptCommand<CR>
+nnoremap <C-s>c :VimuxPromptCommand<CR>
 
 " Run last command executed by VimuxRunCommand
 nnoremap <Leader>vl :VimuxRunLastCommand()<CR>
@@ -388,12 +454,17 @@ function! VimuxSlime()
       call VimuxSendText(@v)
       call VimuxSendKeys("Enter")
 endfunction
+
 vnoremap <Leader>vs "vy :call VimuxSlime()<CR>
+" vnoremap <Leader>vs "vy :call VimuxSlime()<CR>:call VimuxZoomRunner()<CR>
+
+nnoremap <C-s>b vip"vy:call VimuxSlime()<CR>
+nnoremap <C-s>f ggVG"vy:call VimuxSlime()<CR>
 
 let g:VimuxHeight = "5"
 
-" let g:VimuxRunnerType = "pane"
-let g:VimuxRunnerType = "window"
+let g:VimuxRunnerType = "pane"
+" let g:VimuxRunnerType = "window"
 " }}}
 
 "  tagbar 설정                                {{{
@@ -444,4 +515,19 @@ augroup filetype_java_eclim
     autocmd FileType java nnoremap <buffer> <localleader>jt :VimuxPromptCommand<CR>gradle test --info<CR>:call VimuxZoomRunner()<CR>
     autocmd FileType java nnoremap <buffer> <localleader>jc :VimuxPromptCommand<CR>gradle compileJava --info<CR>:call VimuxZoomRunner()<CR>
 augroup END
+" }}}
+
+" scala                                       {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+augroup NeomakeScala
+    autocmd!
+    autocmd BufWritePost *.scala Neomake! sbt
+augroup END
+" }}}
+
+" fzf                                         {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+nnoremap <C-x>ff :Files<cr>
+nnoremap <C-x>fl :Lines<cr>
+nnoremap <C-x>fb :BLines<cr>
 " }}}
