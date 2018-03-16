@@ -19,6 +19,8 @@ Plug 'junegunn/fzf.vim'
 " colors
 Plug 'https://github.com/altercation/vim-colors-solarized'
 Plug 'https://github.com/vim-scripts/wombat256.vim'
+Plug 'https://github.com/nanotech/jellybeans.vim'
+
 
 " programming
 Plug 'https://github.com/honza/vim-snippets'
@@ -48,13 +50,9 @@ call plug#end()
 set t_Co=256
 
 " colorscheme wombat256mod
-" colorscheme pyte
-" colorscheme summerfruit256
-" colorscheme nuvola
-" colorscheme oceanlight
-" colorscheme buttercream
-set background=light
-colorscheme solarized
+" colorscheme solarized
+" set background=light
+colorscheme jellybeans
 
 " <leader> key를 ,로 변경
 let mapleader=","
@@ -148,6 +146,10 @@ nnoremap - <C-w>-
 " tab navigation
 nnoremap <leader>tn :tabnext<CR>
 nnoremap <leader>tp :tabnext<CR>
+
+" save
+nnoremap <C-s><C-s> :w<CR>
+inoremap <C-s><C-s> <ESC>:w<CR>
 " }}}
 
 " preview window setup                       {{{
@@ -345,6 +347,7 @@ let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
 let g:airline_theme='murmur'
+" let g:airline_theme='wombat'
 " }}}
 
 " AsyncRun 설정                              {{{
@@ -447,8 +450,8 @@ nnoremap <Leader>vx :VimuxInterruptRunner<CR>
 nnoremap <Leader>vz :call VimuxZoomRunner()<CR>
 
 " Run last command and zoom the runner pane
-inoremap <C-s> <Esc>:w<CR>:call VimuxRunLastCommand()<CR>:call VimuxZoomRunner()<CR>
-nnoremap <C-s> :w<CR>:call VimuxRunLastCommand()<CR>:call VimuxZoomRunner()<CR>
+" inoremap <C-s> <Esc>:w<CR>:call VimuxRunLastCommand()<CR>:call VimuxZoomRunner()<CR>
+" nnoremap <C-s><C-s> :w<CR>:call VimuxRunLastCommand()<CR>:call VimuxZoomRunner()<CR>
 
 " If text is selected, save it in the v buffer and send that buffer it to tmux
 function! VimuxSlime()
