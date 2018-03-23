@@ -52,6 +52,7 @@ def copy_and_git_add(srcs,dsts):
             shutil.copy(_src, _dst)
         subprocess.call(['git', 'add', _dst])
 
+
 def git_rm(dsts):
     _files_in_git = subprocess.check_output(
                     ['git', 'ls-tree', '-r', 'master', '--name-only']).decode('utf-8').split()
@@ -67,6 +68,7 @@ def git_commit():
 
 def git_push():
     subprocess.call(['git', 'push', 'origin', 'master'])
+
 
 if __name__ == '__main__':
     print("Starting...")
