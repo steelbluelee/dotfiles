@@ -63,7 +63,7 @@ def git_rm(dsts):
 
 def git_commit():
     return subprocess.check_output(['git', 'commit', '-m',
-        str(datetime.datetime.now())])
+        str(datetime.datetime.now())]).decode('utf-8')
 
 def git_push():
     subprocess.call(['git', 'push', 'origin', 'master'])
@@ -74,5 +74,4 @@ if __name__ == '__main__':
     copy_and_git_add(srcs, dsts)
     git_rm(dsts)
     git_commit()
-    git_push()
     print("Ending...")
