@@ -62,7 +62,7 @@ def git_rm(dsts):
 
 
 def git_commit():
-    return subprocess.call(['git', 'commit', '-m', str(datetime.datetime.now())])
+    return not subprocess.call(['git', 'commit', '-m', str(datetime.datetime.now())])
 
 
 def git_push():
@@ -73,6 +73,6 @@ if __name__ == '__main__':
     srcs,dsts = get_backup_list()
     copy_and_git_add(srcs, dsts)
     git_rm(dsts)
-    if not git_commit():
+    if git_commit():
         git_push()
     print("Ending...")
