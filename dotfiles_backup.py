@@ -30,6 +30,7 @@ def get_backup_list():
 
 
 def modification_time(filename):
+    print(filename)
     t = os.path.getmtime(filename)
     return datetime.datetime.fromtimestamp(t)
 
@@ -41,8 +42,11 @@ import subprocess
 def copy_and_git_add(srcs,dsts):
     for _src,_dst in zip(srcs,dsts):
         if _src != 'None':
+            if not os.path.isdir('/'.join(_dst.split('/')[:-1])):
+                subprocess.call(['mkdir', '-p', '/'.join(_dst.split('/')[:-1])])
             _src_time = modification_time(_src)
-            _dst_time = modification_time(_dst)
+            _dst_time = (modification_time(_dst) if os.path.exists(_dst)
+                    else datetime.datetime(1,1,1,1))
             if (_src_time > _dst_time):
                 print('Coping ' + _src + " to " + _dst + ' ...')
             shutil.copy(_src, _dst)
@@ -69,6 +73,5 @@ if __name__ == '__main__':
     copy_and_git_add(srcs, dsts)
     git_rm(dsts)
     git_commit()
-    git_push()
     print("Ending...")
 
