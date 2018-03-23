@@ -56,7 +56,6 @@ def git_rm(dsts):
     _files_in_git = subprocess.check_output(
                     ['git', 'ls-tree', '-r', 'master', '--name-only']).decode('utf-8').split()
     for f in _files_in_git:
-        print(os.path.abspath(f))
         if os.path.abspath(f) not in dsts:
             print('Deleting ' + f + '...')
             subprocess.call(['git', 'rm', f])
