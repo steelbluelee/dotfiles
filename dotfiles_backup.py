@@ -78,7 +78,6 @@ if __name__ == '__main__':
     srcs,dsts = get_backup_list()
     copy_and_git_add(srcs, dsts)
     git_rm(dsts)
-    print(git_commit())
-    if '커밋할 사항 없음' not in git_commit():
+    if '커밋할 사항 없음' not in git_commit1():
         git_push()
     print("Ending...")
