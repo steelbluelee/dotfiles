@@ -65,14 +65,9 @@ def git_commit():
     subprocess.call(['git', 'commit', '-m', str(datetime.datetime.now())])
 
 
-def locale_to(lc):
-    _new_lc = dict( os.environ )
-    for lc,_ in _new_lc:
-        _new_lc[lc] = lc
-
 def git_commit1():
-    _new_lc = locale_to('en_US.utf-8')
-    return subprocess.check_output(['git', 'commit', '-m', str(datetime.datetime.now())], env=_new_env).decode('utf-8')
+    return subprocess.check_output(
+            ['git', 'commit', '-m', str(datetime.datetime.now())] ).decode('utf-8')
 
 
 def git_push():
@@ -83,5 +78,6 @@ if __name__ == '__main__':
     srcs,dsts = get_backup_list()
     copy_and_git_add(srcs, dsts)
     git_rm(dsts)
-    git_commit()
+    if '커밋할 사항 없음' not in git_commit():
+        git_push()
     print("Ending...")
