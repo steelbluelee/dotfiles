@@ -62,7 +62,8 @@ def git_rm(dsts):
 
 
 def git_commit():
-    subprocess.call(['git', 'commit', '-m', str(datetime.datetime.now())])
+    return subprocess.check_output(['git', 'commit', '-m',
+        str(datetime.datetime.now())])
 
 def git_push():
     subprocess.call(['git', 'push', 'origin', 'master'])
