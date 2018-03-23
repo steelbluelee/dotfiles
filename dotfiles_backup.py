@@ -62,11 +62,7 @@ def git_rm(dsts):
 
 
 def git_commit():
-    subprocess.call(['git', 'commit', '-m', str(datetime.datetime.now())])
-
-
-def git_commit1():
-    return subprocess.check_output( ['git', 'commit', '-m', str(datetime.datetime.now())] ).decode('utf-8')
+    return subprocess.call(['git', 'commit', '-m', str(datetime.datetime.now())])
 
 
 def git_push():
@@ -77,6 +73,6 @@ if __name__ == '__main__':
     srcs,dsts = get_backup_list()
     copy_and_git_add(srcs, dsts)
     git_rm(dsts)
-    if '커밋할 사항 없음' not in git_commit1():
+    if not git_commit():
         git_push()
     print("Ending...")
