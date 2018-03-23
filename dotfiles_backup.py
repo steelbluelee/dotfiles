@@ -66,7 +66,9 @@ def git_commit():
 
 
 def git_commit1():
-    return subprocess.check_output(['git', 'commit', '-m', str(datetime.datetime.now())]).decode('utf-8')
+    _new_env = dict( os.environ ) 
+    _new_env['LC_ALL'] = 'C' 
+    return subprocess.check_output(['git', 'commit', '-m', str(datetime.datetime.now())], env=_new_env).decode('utf-8')
 
 
 def git_push():
