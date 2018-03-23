@@ -69,6 +69,7 @@ def git_commit1():
     _new_env = dict( os.environ ) 
     _new_env['LC_ALL'] = 'C' 
     _new_env['LANG'] = 'C'
+    _new_env['ALL'] = 'C'
     return subprocess.check_output(['git', 'commit', '-m', str(datetime.datetime.now())], env=_new_env).decode('utf-8')
 
 
