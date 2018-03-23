@@ -73,5 +73,5 @@ if __name__ == '__main__':
     copy_and_git_add(srcs, dsts)
     git_rm(dsts)
     git_commit()
+    git_push()
     print("Ending...")
-

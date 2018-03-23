@@ -1,0 +1,12 @@
+None .gitignore
+None README.md
+None dotfiles_backup.py
+None dotfileslist.txt
+~/.config/nvim/init.vim ~/backup/dotfiles/init.vim
+$HOME/.bashrc ~/backup/dotfiles/bash.rc
+~/.tmux.conf ./tmux.conf
+~/.tmux.conf.local tmux.conf.local
+~/.vimrc ~/backup/dotfiles/vim.rc
+~/.sbt/1.0/plugins/plugins.sbt ~/backup/dotfiles/plugins.sbt
+~/.sbt/1.0/build.sbt ~/backup/dotfiles/build.sbt
+~/.config/fish/config.fish ~/backup/dotfiles/config.fish
