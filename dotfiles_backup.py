@@ -65,11 +65,13 @@ def git_commit():
     subprocess.call(['git', 'commit', '-m', str(datetime.datetime.now())])
 
 
+def locale_to(lc):
+    _new_lc = dict( os.environ )
+    for lc,_ in _new_lc:
+        _new_lc[lc] = lc
+
 def git_commit1():
-    _new_env = dict( os.environ ) 
-    _new_env['LC_ALL'] = 'C' 
-    _new_env['LANG'] = 'C'
-    _new_env['ALL'] = 'C'
+    _new_lc = locale_to('en_US.utf-8')
     return subprocess.check_output(['git', 'commit', '-m', str(datetime.datetime.now())], env=_new_env).decode('utf-8')
 
 
