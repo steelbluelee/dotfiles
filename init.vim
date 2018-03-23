@@ -41,6 +41,9 @@ Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
 Plug 'https://github.com/derekwyatt/vim-scala'
 Plug 'https://github.com/ktvoelker/sbt-vim'
 
+" python
+Plug 'zchee/deoplete-jedi'
+
 call plug#end()
 "  }}}
 
@@ -346,7 +349,8 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
-let g:airline_theme='murmur'
+let g:airline_theme='luna'
+" let g:airline_theme='murmur'
 " let g:airline_theme='wombat'
 " }}}
 
@@ -535,3 +539,11 @@ nnoremap <C-x>ff :Files<cr>
 nnoremap <C-x>fl :Lines<cr>
 nnoremap <C-x>fb :BLines<cr>
 " }}}
+
+" python : jedi                               {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+autocmd FileType python setlocal completeopt-=preview
+" }}}
+
+
+
