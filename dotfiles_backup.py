@@ -99,7 +99,7 @@ def git_push():
 
 
 def process():
-    print("Starting...")
+    print("Starting backup...")
     srcs,dsts = get_backup_list()
     copy_dotfiles(srcs, dsts)
     git_add(dsts)
