@@ -6,6 +6,8 @@ import datetime
 from pathlib import Path
 home = str(Path.home())
 from functional import seq
+import shutil
+import subprocess
 
 
 def unzip(s):
@@ -41,10 +43,6 @@ def get_backup_list():
 def modification_time(filename):
     t = os.path.getmtime(filename)
     return datetime.datetime.fromtimestamp(t)
-
-
-import shutil
-import subprocess
 
 
 def copy_and_git_add(srcs,dsts):
@@ -84,7 +82,7 @@ if __name__ == '__main__':
     print("Starting...")
     srcs,dsts = get_backup_list()
     copy_and_git_add(srcs, dsts)
-    git_rm(dsts)
+    git_rm(set(dsts))
     if git_commit():
         git_push()
     print("Ending...")
