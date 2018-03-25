@@ -1,6 +1,6 @@
 None .gitignore
 None README.md
-None dotfiles_backup.py
+None backupdotfiles.py
 None dotfileslist.txt
 ~/.config/nvim/init.vim ~/backup/dotfiles/init.vim
 $HOME/.bashrc ~/backup/dotfiles/bash.rc
