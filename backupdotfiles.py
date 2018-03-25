@@ -80,11 +80,12 @@ def git_add(dsts):
 
 
 def git_rm(dsts):
+    _dsts = set(dsts)
     _files_in_git_repo = subprocess.check_output( \
             ['git', 'ls-tree', '-r', 'master', '--name-only'] ) \
             .decode('utf-8').split()
     for f in _files_in_git_repo:
-        if os.path.abspath(f) not in dsts:
+        if os.path.abspath(f) not in _dsts:
             print('Deleting ' + f + '...')
             subprocess.call(['git', 'rm', f])
 
@@ -103,7 +104,7 @@ def do_backup():
     srcs,dsts = get_backup_list()
     copy_dotfiles(srcs, dsts)
     git_add(dsts)
-    git_rm(set(dsts))
+    git_rm(dsts)
     if git_commit():
         git_push()
     print("Ending...")
