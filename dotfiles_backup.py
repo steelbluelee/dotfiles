@@ -37,7 +37,7 @@ def get_backup_list():
             seq.open('./dotfileslist.txt') \
             .map(lambda l: l.strip()) \
             .filter(lambda l: not l.startswith('#') and len(l) != 0) \
-            .map(lambda l: l.split()) \
+            .map(lambda l: l.split('#')[0].strip().split()) \
             .map(lambda ss: (absolute_path(ss[0]), absolute_path(ss[1])))
             )
 
