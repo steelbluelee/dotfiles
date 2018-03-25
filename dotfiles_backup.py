@@ -5,28 +5,37 @@ import os
 import datetime
 from pathlib import Path
 home = str(Path.home())
+from functional import seq
+
+
+def unzip(s):
+    _ls = []
+    _rs = []
+    for l,r in s:
+        _ls.append(l)
+        _rs.append(r)
+    return (_ls, _rs)
+
+
+def absolute_path(s):
+    if s.upper() != 'NONE':
+        _s = s.replace('$HOME', '~')
+        _s = _s.replace('~', home) \
+                if _s.startswith('~/') \
+                else os.path.abspath(_s)
+    else:
+        _s = 'None'
+    return _s
 
 
 def get_backup_list():
-    with open('./dotfileslist.txt') as f:
-        _srcs = []
-        _dsts = []
-        for line in f.readlines():
-            _line = line.strip()
-            if not _line.startswith('#') and len(_line) != 0:
-                _src,_dst = _line.split()
-                if _src.upper() != 'NONE' :
-                    _src = _src.replace('$HOME', '~')
-                    _src = (_src.replace('~', home) if _src.startswith('~/') 
-                            else os.path.abspath(_src))
-                else:
-                    _src = 'None'
-                _dst = _dst.replace('$HOME', '~')
-                _dst = (_dst.replace('~', home) if _dst.startswith('~/')
-                        else os.path.abspath(_dst))
-                _srcs.append(_src)
-                _dsts.append(_dst)
-    return _srcs,_dsts
+    return unzip( \
+            seq.open('./dotfileslist.txt') \
+            .map(lambda l: l.strip()) \
+            .filter(lambda l: not l.startswith('#') and len(l) != 0) \
+            .map(lambda l: l.split()) \
+            .map(lambda ss: (absolute_path(ss[0]), absolute_path(ss[1])))
+            )
 
 
 def modification_time(filename):
@@ -63,7 +72,8 @@ def git_rm(dsts):
 
 
 def git_commit():
-    return not subprocess.call(['git', 'commit', '-m', str(datetime.datetime.now())])
+    return not subprocess.call( \
+            ['git', 'commit', '-m', str(datetime.datetime.now())] )
 
 
 def git_push():
