@@ -30,7 +30,6 @@ def get_backup_list():
 
 
 def modification_time(filename):
-    print(filename)
     t = os.path.getmtime(filename)
     return datetime.datetime.fromtimestamp(t)
 
