@@ -45,7 +45,7 @@ def modification_time(filename):
     return datetime.datetime.fromtimestamp(t)
 
 
-def copy_and_git_add(srcs,dsts):
+def copy_dotfiles(srcs,dsts):
     for _src,_dst in zip(srcs,dsts):
         if _src != 'None':
             if not os.path.isdir('/'.join(_dst.split('/')[:-1])):
@@ -56,6 +56,11 @@ def copy_and_git_add(srcs,dsts):
             if (_src_time > _dst_time):
                 print('Coping ' + _src + " to " + _dst + ' ...')
             shutil.copy(_src, _dst)
+
+
+
+def git_add(dsts):
+    for _dst in dsts:
         subprocess.call(['git', 'add', _dst])
 
 
@@ -81,7 +86,8 @@ def git_push():
 if __name__ == '__main__':
     print("Starting...")
     srcs,dsts = get_backup_list()
-    copy_and_git_add(srcs, dsts)
+    copy_dotfiles(srcs, dsts)
+    git_add(dsts)
     git_rm(set(dsts))
     if git_commit():
         git_push()
