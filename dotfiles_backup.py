@@ -51,21 +51,19 @@ def make_dir_if_not_exist(filepath):
         subprocess.call(['mkdir', '-p', _d])
 
 
-def srcupdated(src, dst):
-    _src_t = modification_time(_src)
-    _dst_t = modification_time(_dst) \
-            if os.path.exists(_dst) \
+def src_updated(src, dst):
+    _src_t = modification_time(src)
+    _dst_t = modification_time(dst) \
+            if os.path.exists(dst) \
             else datetime.datetime(1,1,1,1)
     return _src_t > _dst_t
     
+
 def copy_dotfiles(srcs,dsts):
     for _src,_dst in zip(srcs,dsts):
         if _src != 'None':
             make_dir_if_not_exist(_dst)
-            _src_time = modification_time(_src)
-            _dst_time = (modification_time(_dst) if os.path.exists(_dst)
-                    else datetime.datetime(1,1,1,1))
-            if (_src_time > _dst_time):
+            if src_updated(_src, _dst):
                 print('Coping ' + _src + " to " + _dst + ' ...')
                 shutil.copy(_src, _dst)
 
