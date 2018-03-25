@@ -43,7 +43,7 @@ def get_backup_list():
 
 
 def make_dir_if_not_exist(filepath):
-    _d = '/'.join(filepath.split('/'))[:-1]
+    _d = '/'.join(filepath.split('/')[:-1])
     if not os.path.isdir(_d):
         subprocess.call(['mkdir', '-p', _d])
 
