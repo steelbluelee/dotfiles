@@ -98,7 +98,7 @@ def git_push():
     subprocess.call(['git', 'push', 'origin', 'master'])
 
 
-if __name__ == '__main__':
+def process():
     print("Starting...")
     srcs,dsts = get_backup_list()
     copy_dotfiles(srcs, dsts)
@@ -107,3 +107,7 @@ if __name__ == '__main__':
     if git_commit():
         git_push()
     print("Ending...")
+
+
+if __name__ == '__main__':
+    process()
