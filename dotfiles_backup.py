@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+# This app require 'pyfunctional' package
+# You need 'pip3 install pyfunctional --user'
 
 
 import os
@@ -40,15 +42,15 @@ def get_backup_list():
             )
 
 
-def modification_time(filename):
-    t = os.path.getmtime(filename)
-    return datetime.datetime.fromtimestamp(t)
-
-
 def make_dir_if_not_exist(filepath):
     _d = '/'.join(filepath.split('/'))[:-1]
     if not os.path.isdir(_d):
         subprocess.call(['mkdir', '-p', _d])
+
+
+def modification_time(filename):
+    t = os.path.getmtime(filename)
+    return datetime.datetime.fromtimestamp(t)
 
 
 def src_updated(src, dst):
