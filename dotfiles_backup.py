@@ -61,14 +61,17 @@ def src_updated(src, dst):
     return _src_t > _dst_t
     
 
+def copy_dotfile_if_updated(src, dst):
+    if src_updated(src, dst):
+        print('Coping ' + src + " to " + dst + ' ...')
+        shutil.copy(src, dst)
+
+
 def copy_dotfiles(srcs,dsts):
     for _src,_dst in zip(srcs,dsts):
         if _src != 'None':
             make_dir_if_not_exist(_dst)
-            if src_updated(_src, _dst):
-                print('Coping ' + _src + " to " + _dst + ' ...')
-                shutil.copy(_src, _dst)
-
+            copy_dotfile_if_updated(_src, _dst)
 
 
 def git_add(dsts):
