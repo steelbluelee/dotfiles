@@ -53,8 +53,9 @@ def copy_and_git_add(srcs,dsts):
 
 
 def git_rm(dsts):
-    _files_in_git = subprocess.check_output(
-                    ['git', 'ls-tree', '-r', 'master', '--name-only']).decode('utf-8').split()
+    _files_in_git = subprocess.check_output( \
+            ['git', 'ls-tree', '-r', 'master', '--name-only'] ) \
+            .decode('utf-8').split()
     for f in _files_in_git:
         if os.path.abspath(f) not in dsts:
             print('Deleting ' + f + '...')
