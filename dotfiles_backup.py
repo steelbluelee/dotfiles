@@ -51,6 +51,13 @@ def make_dir_if_not_exist(filepath):
         subprocess.call(['mkdir', '-p', _d])
 
 
+def srcupdated(src, dst):
+    _src_t = modification_time(_src)
+    _dst_t = modification_time(_dst) \
+            if os.path.exists(_dst) \
+            else datetime.datetime(1,1,1,1)
+    return _src_t > _dst_t
+    
 def copy_dotfiles(srcs,dsts):
     for _src,_dst in zip(srcs,dsts):
         if _src != 'None':
