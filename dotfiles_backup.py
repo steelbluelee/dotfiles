@@ -45,17 +45,22 @@ def modification_time(filename):
     return datetime.datetime.fromtimestamp(t)
 
 
+def make_dir_if_not_exist(filepath):
+    _d = '/'.join(filepath.split('/'))[:-1]
+    if not os.path.isdir(_d):
+        subprocess.call(['mkdir', '-p', _d])
+
+
 def copy_dotfiles(srcs,dsts):
     for _src,_dst in zip(srcs,dsts):
         if _src != 'None':
-            if not os.path.isdir('/'.join(_dst.split('/')[:-1])):
-                subprocess.call(['mkdir', '-p', '/'.join(_dst.split('/')[:-1])])
+            make_dir_if_not_exist(_dst)
             _src_time = modification_time(_src)
             _dst_time = (modification_time(_dst) if os.path.exists(_dst)
                     else datetime.datetime(1,1,1,1))
             if (_src_time > _dst_time):
                 print('Coping ' + _src + " to " + _dst + ' ...')
-            shutil.copy(_src, _dst)
+                shutil.copy(_src, _dst)
 
 
 
