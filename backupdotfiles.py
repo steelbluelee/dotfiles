@@ -33,13 +33,13 @@ def absolute_path(s):
 
 
 def get_backup_list():
-    return unzip( \
-            seq.open('./dotfileslist.txt') \
+    return list( zip( \
+            *(seq.open('./dotfileslist.txt') \
             .map(lambda l: l.strip()) \
             .filter(lambda l: not l.startswith('#') and len(l) != 0) \
             .map(lambda l: l.split('#')[0].strip().split()) \
             .map(lambda ss: (absolute_path(ss[0]), absolute_path(ss[1])))
-            )
+            ) ) )
 
 
 def make_dir_if_not_exist(filepath):
