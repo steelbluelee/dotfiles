@@ -12,15 +12,6 @@ import shutil
 import subprocess
 
 
-def unzip(s):
-    _ls = []
-    _rs = []
-    for l,r in s:
-        _ls.append(l)
-        _rs.append(r)
-    return (_ls, _rs)
-
-
 def absolute_path(s):
     if s.upper() != 'NONE':
         _s = s.replace('$HOME', '~')
