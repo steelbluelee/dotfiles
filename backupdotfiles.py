@@ -24,7 +24,7 @@ def absolute_path(s):
 
 
 def get_backup_list():
-    return list( zip( \
+    return tuple( zip( \
             *(seq.open('./dotfileslist.txt') \
             .map(lambda l: l.strip()) \
             .filter(lambda l: not l.startswith('#') and len(l) != 0) \
