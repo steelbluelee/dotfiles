@@ -44,6 +44,9 @@ Plug 'https://github.com/ktvoelker/sbt-vim'
 " python
 Plug 'zchee/deoplete-jedi'
 
+" html
+Plug 'mattn/emmet-vim'
+
 call plug#end()
 "  }}}
 
@@ -64,7 +67,7 @@ let mapleader=","
 let maplocalleader=";"
 
 " <space>를 za로 바인딩 :
-nnoremap <space> za
+" nnoremap <Enter> za
 
 " jk를 <ESC>로 바인딩. jk를 문자열을 입력하려면
 " j 입력 후 1초 기다리면 됨
@@ -153,6 +156,8 @@ nnoremap <leader>tp :tabnext<CR>
 " save
 nnoremap <C-s><C-s> :w<CR>
 inoremap <C-s><C-s> <ESC>:w<CR>
+nnoremap <C-s><C-g> :Gwrite<CR>
+inoremap <C-s><C-g> :Gwrite<CR>
 " }}}
 
 " preview window setup                       {{{
