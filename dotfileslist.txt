@@ -11,3 +11,4 @@ $HOME/.bashrc ~/backup/dotfiles/bash.rc
 ~/.sbt/1.0/build.sbt ~/backup/dotfiles/build.sbt
 ~/.config/fish/config.fish ~/backup/dotfiles/config.fish
 ~/.tmuxinator/tscala.yml ~/backup/dotfiles/tmuxinator/tscala.yml
+~/.config/fish/functions/fish_user_key_bindings.fish ~/backup/dotfiles/fish_user_key_bindings.fish
