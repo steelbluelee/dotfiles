@@ -1,8 +1,13 @@
 " $HOME/.config/nvim/init.vim
+" $HOME/.vimrc
 
 " vim-plug : vim plugins                 {{{
 """"""""""""""""""""""""""""""""""""""""""""""""
-call plug#begin('~/.nvim/vim-plug')
+if has('nvim')
+    call plug#begin('~/.nvim/vim-plug')
+else
+    call plug#begin('~/.vim/vim-plug')
+endif
 
 " common
 Plug 'https://github.com/scrooloose/nerdtree'
@@ -29,23 +34,43 @@ Plug 'https://github.com/Raimondi/delimitMate'
 Plug 'https://github.com/majutsushi/tagbar'
 Plug 'https://github.com/ervandew/supertab'
 Plug 'https://github.com/SirVer/ultisnips'
-" Plug 'https://github.com/Shougo/neocomplete.vim'
 Plug 'https://github.com/scrooloose/nerdcommenter'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'https://github.com/neomake/neomake'
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
+
+" Plug 'https://github.com/neomake/neomake'
+" Plug 'Chiel92/vim-autoformat'
+" Plug 'sbdchd/neoformat'
+if has('nvim')
+    Plug 'eed3si9n/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'prabirshrestha/async.vim'
+    Plug 'prabirshrestha/vim-lsp'
+endif
 
 " languages
 " Plug 'ensime/ensime-vim' => for vim not neovim
 " scala
-Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
+if has('nvim')
+    Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'ensime/ensime-vim'
+endif
 Plug 'https://github.com/derekwyatt/vim-scala'
 Plug 'https://github.com/ktvoelker/sbt-vim'
 
 " python
 Plug 'zchee/deoplete-jedi'
 
-" html
+" html, css, javascript, json
 Plug 'mattn/emmet-vim'
+Plug 'https://github.com/maksimr/vim-jsbeautify'
 
 call plug#end()
 "  }}}
@@ -158,6 +183,11 @@ nnoremap <C-s><C-s> :w<CR>
 inoremap <C-s><C-s> <ESC>:w<CR>
 nnoremap <C-s><C-g> :Gwrite<CR>
 inoremap <C-s><C-g> :Gwrite<CR>
+
+" copy & paste
+vnoremap <leader>y "+y
+nnoremap <leader>p "+p
+nnoremap <leader>P "+P
 " }}}
 
 " preview window setup                       {{{
@@ -236,8 +266,13 @@ augroup END
 
 " key binding and sourcing for opening vimrcfile
 " vimrc 파일 열기 & 적용
-nnoremap <leader>ev :e ~/.config/nvim/init.vim<cr>
-nnoremap <leader>sv :source ~/.config/nvim/init.vim<cr>
+if has('nvim')
+    nnoremap <leader>ev :e ~/.config/nvim/init.vim<cr>
+    nnoremap <leader>sv :source ~/.config/nvim/init.vim<cr>
+else
+    nnoremap <leader>ev :e ~/.vimrc<cr>
+    nnoremap <leader>sv :source ~/.vimrc<cr>
+endif
 " }}}
 
 " 들여쓰기, 탭 : indentation, Tab 설정       {{{
@@ -335,6 +370,29 @@ function! ToggleMenuScrollBarToolBar()
     endif
 endfunction
 "}}}
+
+" LanguageClient : LanguageClient-neovim, vim-lsp 설정{{{
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has('nvim')
+set signcolumn=yes
+    let g:LanguageClient_autoStart = 1
+    let g:LanguageClient_serverCommands = {
+        \ 'scala': ['node', expand('~/.bin/sbt-server-stdio.js')]
+        \ }
+    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+else
+    autocmd User lsp_setup call lsp#register_server({
+                    \ 'name': 'scala',
+                    \ 'cmd': {server_info->['sbt-server-stdio.js']},
+                    \ 'whitelist': ['scala'],
+                    \ })
+    let g:lsp_signs_enabled = 1         " enable signs
+    let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+    let g:lsp_signs_error = {'text': '✗'}
+    let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
+    let g:lsp_signs_hint = {'icon': '/path/to/some/other/icon'} " icons require GUI
+endif
+" }}}
 
 " airline                                    {{{
 " """"""""""""""""""""""""""""""""""""""""""""""
@@ -495,15 +553,6 @@ nnoremap <leader>i :IndentLinesToggle<cr>
 
 " }}}
 
-" UltiSnips                                   {{{
-" """""""""""""""""""""""""""""""""""""""""""""""
-" Trigger configuration. Do not use <tab> if you use
-" https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-" }}}
-
 " delimitMate                                 {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
 let g:delimitMate_expand_cr = 2
@@ -532,10 +581,15 @@ augroup END
 
 " scala                                       {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
-augroup NeomakeScala
+augroup filetype_scala
     autocmd!
-    autocmd BufWritePost *.scala Neomake! sbt
+"     autocmd BufWritePost *.scala Neomake! sbt
+    " autocmd FileType scala nnoremap <buffer> <C-s><C-f> mvgg=G4x`v:write<CR>
+    autocmd FileType scala nnoremap <buffer> <C-s><C-f> :write<CR>:!ng scalafmt % --config ~/.scalafmt.conf<CR><CR>:edit!<CR>
+    autocmd FileType scala inoremap <buffer> <C-s><C-f> <Esc>:write<CR>:!ng scalafmt % --config ~/.scalafmt.conf<CR><CR>:edit!<CR>
 augroup END
+autocmd BufEnter *.scala setl formatprg=scalafmt\ --config\ $HOME/.scalafmt.conf\ --stdin
+autocmd BufEnter *.scala setl equalprg=scalafmt\ --config\ $HOME/.scalafmt.conf\ --stdin
 " }}}
 
 " fzf                                         {{{
@@ -550,5 +604,21 @@ nnoremap <C-x>fb :BLines<cr>
 autocmd FileType python setlocal completeopt-=preview
 " }}}
 
-
-
+" html, css, javascript, json                 {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+augroup jsbeautify_group
+    autocmd!
+    autocmd FileType javascript vnoremap <buffer>  <SPACE>ff :call RangeJsBeautify()<cr>
+    autocmd FileType javascript nnoremap <buffer>  <SPACE>ff mvggVG:call RangeJsBeautify()<cr>`v
+    autocmd FileType json vnoremap <buffer> <SPACE>ff :call RangeJsonBeautify()<cr>
+    autocmd FileType json nnoremap <buffer> <SPACE>ff mvggVG:call RangeJsonBeautify()<cr>`v
+    autocmd FileType jsx vnoremap <buffer> <SPACE>ff :call RangeJsxBeautify()<cr>
+    autocmd FileType jsx nnoremap <buffer> <SPACE>ff mvggVG:call RangeJsxBeautify()<cr>`v
+    autocmd FileType html vnoremap <buffer> <SPACE>ff :call RangeHtmlBeautify()<cr>
+    autocmd FileType html nnoremap <buffer> <SPACE>ff mvggVG:call RangeHtmlBeautify()<cr>`v
+    autocmd FileType html nnoremap <buffer> <C-s><C-f> mvggVG:call RangeHtmlBeautify()<cr>`v:write<cr>
+    autocmd FileType html inoremap <buffer> <C-s><C-f> <ESC>mvggVG:call RangeHtmlBeautify()<cr>`v:write<cr>
+    autocmd FileType css vnoremap <buffer> <SPACE>ff :call RangeCSSBeautify()<cr>
+    autocmd FileType css nnoremap <buffer> <SPACE>ff mvggVG:call RangeCSSBeautify()<cr>`v
+augroup END
+" }}}

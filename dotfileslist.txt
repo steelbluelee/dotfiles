@@ -10,3 +10,4 @@ $HOME/.bashrc ~/backup/dotfiles/bash.rc
 ~/.sbt/1.0/plugins/plugins.sbt ~/backup/dotfiles/plugins.sbt
 ~/.sbt/1.0/build.sbt ~/backup/dotfiles/build.sbt
 ~/.config/fish/config.fish ~/backup/dotfiles/config.fish
+~/.tmuxinator/tscala.yml ~/backup/dotfiles/tmuxinator/tscala.yml
