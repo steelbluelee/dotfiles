@@ -1,6 +1,10 @@
 " $HOME/.config/nvim/init.vim
 " $HOME/.vimrc
 
+if &shell =~# 'fish$'
+    set shell=sh
+endif
+
 " vim-plug : vim plugins                 {{{
 """"""""""""""""""""""""""""""""""""""""""""""""
 if has('nvim')
@@ -28,6 +32,7 @@ Plug 'https://github.com/nanotech/jellybeans.vim'
 
 
 " programming
+Plug 'https://github.com/w0rp/ale'
 Plug 'https://github.com/honza/vim-snippets'
 Plug 'https://github.com/Yggdroot/indentLine'
 Plug 'https://github.com/Raimondi/delimitMate'
@@ -55,7 +60,6 @@ else
 endif
 
 " languages
-" Plug 'ensime/ensime-vim' => for vim not neovim
 " scala
 if has('nvim')
     Plug 'ensime/ensime-vim', { 'do': ':UpdateRemotePlugins' }
@@ -72,6 +76,8 @@ Plug 'zchee/deoplete-jedi'
 Plug 'mattn/emmet-vim'
 Plug 'https://github.com/maksimr/vim-jsbeautify'
 
+" fish shell script
+Plug 'https://github.com/dag/vim-fish'
 call plug#end()
 "  }}}
 
@@ -105,6 +111,7 @@ set relativenumber
 " 각 파일에 해당하는 문법(Syntax)를 적용시켜줍니다.
 " C나 Java등 사용시 색상등..
 syntax on
+filetype plugin indent on
 
 " 파일 편집시 undo 할수 있는 최대 횟수 설정
 set history=100
@@ -602,6 +609,8 @@ nnoremap <C-x>fb :BLines<cr>
 " python : jedi                               {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
 autocmd FileType python setlocal completeopt-=preview
+let g:ale_python_pylint_executable = 'pylint-3'
+let g:jedi#force_py_version=3
 " }}}
 
 " html, css, javascript, json                 {{{
@@ -621,4 +630,14 @@ augroup jsbeautify_group
     autocmd FileType css vnoremap <buffer> <SPACE>ff :call RangeCSSBeautify()<cr>
     autocmd FileType css nnoremap <buffer> <SPACE>ff mvggVG:call RangeCSSBeautify()<cr>`v
 augroup END
+" }}}
+
+" fish script                                 {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+augroup fish_group
+    autocmd!
+    " autocmd FileType fish setlocal compiler fish
+    autocmd FileType fish setlocal foldmethod=expr
+augroup END
+
 " }}}

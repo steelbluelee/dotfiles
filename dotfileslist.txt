@@ -12,3 +12,5 @@ $HOME/.bashrc ~/backup/dotfiles/bash.rc
 ~/.config/fish/config.fish ~/backup/dotfiles/config.fish
 ~/.tmuxinator/tscala.yml ~/backup/dotfiles/tmuxinator/tscala.yml
 ~/.config/fish/functions/fish_user_key_bindings.fish ~/backup/dotfiles/fish_user_key_bindings.fish
+~/.pylintrc ~/backup/dotfiles/pylint.rc
+~/.scalafmt.conf ~/backup/dotfiles/scalafmt.conf
