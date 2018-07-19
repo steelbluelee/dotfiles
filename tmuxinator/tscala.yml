@@ -31,7 +31,7 @@ windows:
       layout: main-horizontal
       panes:
           - commands:
-              - ps axuf | grep -v grep | grep scalafmt_ng; or scalafmt_ng &
+              - if [ (ps axuf | grep -v grep | grep scalafmt_ng | wc -l) = "0" ]; scalafmt_ng &; end
               - sleep 1
               - ng ng-alias scalafmt org.scalafmt.cli.Cli
               - clear

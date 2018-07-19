@@ -14,3 +14,4 @@ $HOME/.bashrc ~/backup/dotfiles/bash.rc
 ~/.config/fish/functions/fish_user_key_bindings.fish ~/backup/dotfiles/fish_user_key_bindings.fish
 ~/.pylintrc ~/backup/dotfiles/pylint.rc
 ~/.scalafmt.conf ~/backup/dotfiles/scalafmt.conf
+~/.inputrc ~/backup/dotfiles/input.rc
