@@ -15,6 +15,7 @@ endif
 
 " common
 Plug 'https://github.com/scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'https://github.com/skywind3000/asyncrun.vim'
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -29,7 +30,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'https://github.com/altercation/vim-colors-solarized'
 Plug 'https://github.com/vim-scripts/wombat256.vim'
 Plug 'https://github.com/nanotech/jellybeans.vim'
-
 
 " programming
 Plug 'https://github.com/w0rp/ale'
@@ -47,11 +47,7 @@ else
     Plug 'roxma/nvim-yarp'
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
-let g:deoplete#enable_at_startup = 1
 
-" Plug 'https://github.com/neomake/neomake'
-" Plug 'Chiel92/vim-autoformat'
-" Plug 'sbdchd/neoformat'
 if has('nvim')
     Plug 'eed3si9n/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -150,6 +146,30 @@ filetype plugin on
 " set visualbell
 set noerrorbells visualbell t_vb=
 autocmd GUIEnter * set visualbell t_vb=
+
+" Automatically Quit Vim if Actual Files are Closed
+function! CheckLeftBuffers()
+  if tabpagenr('$') == 1
+    let i = 1
+    while i <= winnr('$')
+      if getbufvar(winbufnr(i), '&buftype') == 'help' ||
+          \ getbufvar(winbufnr(i), '&buftype') == 'quickfix' ||
+          \ exists('t:NERDTreeBufName') &&
+          \   bufname(winbufnr(i)) == t:NERDTreeBufName ||
+          \ bufname(winbufnr(i)) == '__Tag_List__'
+        let i += 1
+      else
+        break
+      endif
+    endwhile
+    if i == winnr('$') + 1
+      qall
+    endif
+    unlet i
+  endif
+endfunction
+autocmd BufEnter * call CheckLeftBuffers()
+
 " }}}
 
 " 기본키 매핑                               {{{
@@ -378,29 +398,6 @@ function! ToggleMenuScrollBarToolBar()
 endfunction
 "}}}
 
-" LanguageClient : LanguageClient-neovim, vim-lsp 설정{{{
-" """""""""""""""""""""""""""""""""""""""""""""""""""""""
-if has('nvim')
-set signcolumn=yes
-    let g:LanguageClient_autoStart = 1
-    let g:LanguageClient_serverCommands = {
-        \ 'scala': ['node', expand('~/.bin/sbt-server-stdio.js')]
-        \ }
-    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-else
-    autocmd User lsp_setup call lsp#register_server({
-                    \ 'name': 'scala',
-                    \ 'cmd': {server_info->['sbt-server-stdio.js']},
-                    \ 'whitelist': ['scala'],
-                    \ })
-    let g:lsp_signs_enabled = 1         " enable signs
-    let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-    let g:lsp_signs_error = {'text': '✗'}
-    let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
-    let g:lsp_signs_hint = {'icon': '/path/to/some/other/icon'} " icons require GUI
-endif
-" }}}
-
 " airline                                    {{{
 " """"""""""""""""""""""""""""""""""""""""""""""
 if !exists('g:airline_symbols')
@@ -434,61 +431,8 @@ let g:airline_theme='luna'
 " """""""""""""""""""""""""""""""""""""""""""""""
 " NERTTree 토글 키 바인딩
 nnoremap <leader>n :NERDTreeToggle<CR>
-" }}}
-
-"  neocomplete 설정                           {{{
-" """""""""""""""""""""""""""""""""""""""""""""""
-" enable
-"    let g:neocomplete#enable_at_startup = 1
-" }}}
-
-"  deoplete 설정                           {{{
-" """""""""""""""""""""""""""""""""""""""""""""""
-" Use deoplete.
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources = {}
-let g:deoplete#sources.scala = ['buffer', 'tags', 'omni']
-let g:deoplete#omni#input_patterns = {}
-let g:deoplete#omni#input_patterns.scala = ['[^. *\t0-9]\.\w*',': [A-Z]\w', '[\[\t\( ][A-Za-z]\w*']
-" }}}
-
-" supertab settings                          {{{
-" """"""""""""""""""""""""""""""""""""""""""""""
-" let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
-" let g:SuperTabDefaultCompletionType = '<c-x><c-u>'
-" let g:SuperTabDefaultCompletionType = 'context'
-
-" if has("gui_running")
-"   imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
-" else " no gui
-"   if has("unix")
-"     inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
-"   endif
-" endif
-" }}}
-
-" NERDCommenter 설정                         {{{
-" """"""""""""""""""""""""""""""""""""""""""""""
-" Add spaces after comment delimiters by default
-let g:NERDSpaceDelims = 1
-
-" Use compact syntax for prettified multi-line comments
-let g:NERDCompactSexyComs = 1
-
-" Align line-wise comment delimiters flush left instead of following code indentation
-let g:NERDDefaultAlign = 'left'
-
-" Set a language to use its alternate delimiters by default
-let g:NERDAltDelims_java = 1
-
-" Add your own custom formats or override the defaults
-let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
-
-" Allow commenting and inverting empty lines (useful when commenting a region)
-let g:NERDCommentEmptyLines = 1
-
-" Enable trimming of trailing whitespace when uncommenting
-let g:NERDTrimTrailingWhitespace = 1
+let NERDTreeAutoDeleteBuffer = 1
+autocmd vimenter * NERDTree
 " }}}
 
 "  tmux / vimux 설정                          {{{
@@ -545,6 +489,78 @@ let g:VimuxRunnerType = "pane"
 " let g:VimuxRunnerType = "window"
 " }}}
 
+" LanguageClient : LanguageClient-neovim, vim-lsp 설정{{{
+" """""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has('nvim')
+set signcolumn=yes
+    let g:LanguageClient_autoStart = 1
+    let g:LanguageClient_serverCommands = {
+        \ 'scala': ['node', expand('~/.bin/sbt-server-stdio.js')]
+        \ }
+    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+else
+    autocmd User lsp_setup call lsp#register_server({
+                    \ 'name': 'scala',
+                    \ 'cmd': {server_info->['sbt-server-stdio.js']},
+                    \ 'whitelist': ['scala'],
+                    \ })
+    let g:lsp_signs_enabled = 1         " enable signs
+    let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+    let g:lsp_signs_error = {'text': '✗'}
+    let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
+    let g:lsp_signs_hint = {'icon': '/path/to/some/other/icon'} " icons require GUI
+endif
+" }}}
+
+"  deoplete 설정                           {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#sources = {}
+let g:deoplete#sources.scala = ['buffer', 'tags', 'omni']
+let g:deoplete#omni#input_patterns = {}
+let g:deoplete#omni#input_patterns.scala = ['[^. *\t0-9]\.\w*',': [A-Z]\w', '[\[\t\( ][A-Za-z]\w*']
+" }}}
+
+" supertab settings                          {{{
+" """"""""""""""""""""""""""""""""""""""""""""""
+" let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+" let g:SuperTabDefaultCompletionType = '<c-x><c-u>'
+" let g:SuperTabDefaultCompletionType = 'context'
+
+" if has("gui_running")
+"   imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
+" else " no gui
+"   if has("unix")
+"     inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
+"   endif
+" endif
+" }}}
+
+" NERDCommenter 설정                         {{{
+" """"""""""""""""""""""""""""""""""""""""""""""
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+" }}}
+
 "  tagbar 설정                                {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <leader>tb :TagbarToggle<CR>
@@ -563,12 +579,6 @@ nnoremap <leader>i :IndentLinesToggle<cr>
 " delimitMate                                 {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
 let g:delimitMate_expand_cr = 2
-" }}}
-
-" eclim                                       {{{
-" """""""""""""""""""""""""""""""""""""""""""""""
-let g:EclimCompletionMethod = 'omnifunc'
-let g:EclimGroovyValidate=0
 " }}}
 
 " java : eclim, gradle test                   {{{
