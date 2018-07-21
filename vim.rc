@@ -48,12 +48,17 @@ else
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
 
-if has('nvim')
-    Plug 'eed3si9n/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-else
-    Plug 'prabirshrestha/async.vim'
-    Plug 'prabirshrestha/vim-lsp'
-endif
+" if has('nvim')
+"     Plug 'eed3si9n/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+" else
+"     Plug 'autozimu/LanguageClient-neovim', {
+"         \ 'branch': 'next',
+"         \ 'do': 'bash install.sh',
+"         \ }
+" endif
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+
 
 " languages
 " scala
@@ -491,35 +496,43 @@ let g:VimuxRunnerType = "pane"
 
 " LanguageClient : LanguageClient-neovim, vim-lsp 설정{{{
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""
-if has('nvim')
-set signcolumn=yes
-    let g:LanguageClient_autoStart = 1
-    let g:LanguageClient_serverCommands = {
-        \ 'scala': ['node', expand('~/.bin/sbt-server-stdio.js')]
-        \ }
-    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-else
+" set signcolumn=yes
+" if has('nvim')
+" let g:LanguageClient_autoStart = 1
+" let g:LanguageClient_serverCommands = {
+"     \ 'scala': ['node', expand('~/.bin/sbt-server-stdio.js')]
+"     \ }
+" nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+" else
     autocmd User lsp_setup call lsp#register_server({
                     \ 'name': 'scala',
                     \ 'cmd': {server_info->['sbt-server-stdio.js']},
                     \ 'whitelist': ['scala'],
                     \ })
     let g:lsp_signs_enabled = 1         " enable signs
-    let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+    " let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
     let g:lsp_signs_error = {'text': '✗'}
     let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
     let g:lsp_signs_hint = {'icon': '/path/to/some/other/icon'} " icons require GUI
-endif
+" endif
 " }}}
 
 "  deoplete 설정                           {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#sources = {}
-let g:deoplete#sources.scala = ['buffer', 'tags', 'omni']
-let g:deoplete#omni#input_patterns = {}
-let g:deoplete#omni#input_patterns.scala = ['[^. *\t0-9]\.\w*',': [A-Z]\w', '[\[\t\( ][A-Za-z]\w*']
+" let g:deoplete#omni#input_patterns.scala = ['[^. *\t0-9]\.\w*',': [A-Z]\w', '[\[\t\( ][A-Za-z]\w*']
+let g:deoplete#enable_camel_case = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#enable_auto_select = 1
+
+if !exists('g:deoplete#sources#omni#input_patterns')
+  let g:deoplete#omni#input_patterns = {}
+endif
+
+let g:deoplete#sources={} 
+let g:deoplete#sources._=['buffer', 'member', 'file', 'tag', 'omni', 'ultisnips'] 
+" let g:deoplete#sources.scala = ['buffer', 'tags', 'omni']
 " }}}
 
 " supertab settings                          {{{
@@ -602,11 +615,14 @@ augroup filetype_scala
     autocmd!
 "     autocmd BufWritePost *.scala Neomake! sbt
     " autocmd FileType scala nnoremap <buffer> <C-s><C-f> mvgg=G4x`v:write<CR>
-    autocmd FileType scala nnoremap <buffer> <C-s><C-f> :write<CR>:!ng scalafmt % --config ~/.scalafmt.conf<CR><CR>:edit!<CR>
-    autocmd FileType scala inoremap <buffer> <C-s><C-f> <Esc>:write<CR>:!ng scalafmt % --config ~/.scalafmt.conf<CR><CR>:edit!<CR>
+    autocmd FileType scala nnoremap <silent> <buffer> <C-s><C-f> :write<CR>:!ng scalafmt % --config ~/.scalafmt.conf<CR><CR>:edit!<CR>
+    autocmd FileType scala inoremap <silent> <buffer> <C-s><C-f> <Esc>:write<CR>:!ng scalafmt % --config ~/.scalafmt.conf<CR><CR>:edit!<CR>
 augroup END
 autocmd BufEnter *.scala setl formatprg=scalafmt\ --config\ $HOME/.scalafmt.conf\ --stdin
 autocmd BufEnter *.scala setl equalprg=scalafmt\ --config\ $HOME/.scalafmt.conf\ --stdin
+" autocmd FileType scala setlocal omnifunc=LanguageClient#complete
+" autocmd FileType scala setlocal completefunc=LanguageClient#complete
+" autocmd FileType scala setlocal omnifunc=EnCompleteFunc
 " }}}
 
 " fzf                                         {{{
