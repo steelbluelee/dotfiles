@@ -25,6 +25,8 @@ Plug 'https://github.com/airblade/vim-gitgutter'
 Plug 'https://github.com/benmills/vimux'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'https://github.com/moll/vim-bbye'
+Plug 'https://github.com/jlanzarotta/bufexplorer'
 
 " colors
 Plug 'https://github.com/altercation/vim-colors-solarized'
@@ -223,6 +225,9 @@ nnoremap <leader>P "+P
 
 " omnifunc
 inoremap <leader><leader> <C-x><C-o>
+
+" toggle fold
+nnoremap <Space><Space> za
 " }}}
 
 " preview window setup                       {{{
@@ -233,6 +238,13 @@ nnoremap <leader>x :pclose<CR>
 "     autocmd!
 "     autocmd CompleteDone * if !&previewwindow && &completeopt =~ 'preview' | silent! pclose | endif
 " augroup END
+"  }}}
+
+" buffer realted setup                       {{{
+" """"""""""""""""""""""""""""""""""""""""""""""
+let g:bufExplorerDefaultHelp=1 " Show default help.
+nnoremap <leader>bb :BufExplorer<cr>
+nnoremap <leader>bw :Bwipeout<cr>
 "  }}}
 
 " search related setup                       {{{
