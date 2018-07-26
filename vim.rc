@@ -207,6 +207,8 @@ nnoremap <leader>W :match none<cr>
 " resizing window size
 nnoremap + <C-w>+
 nnoremap - <C-w>-
+nnoremap <M-+> <C-w>>
+nnoremap <M--> <C-w><
 
 " tab navigation
 nnoremap <leader>tn :tabnext<CR>
@@ -216,7 +218,7 @@ nnoremap <leader>tp :tabnext<CR>
 nnoremap <C-s><C-s> :w<CR>
 inoremap <C-s><C-s> <ESC>:w<CR>
 nnoremap <C-s><C-g> :Gwrite<CR>
-inoremap <C-s><C-g> :Gwrite<CR>
+inoremap <C-s><C-g> <ESC>:Gwrite<CR>
 
 " copy & paste
 vnoremap <leader>y "+y
@@ -473,7 +475,9 @@ nnoremap <Leader>vp :VimuxPromptCommand<CR>
 nnoremap <C-s>c :VimuxPromptCommand<CR>
 
 " Run last command executed by VimuxRunCommand
-nnoremap <Leader>vl :VimuxRunLastCommand()<CR>
+nnoremap <Leader>vl :call VimuxRunLastCommand()<CR>
+nnoremap <C-s><C-v> :write<CR>:call VimuxRunLastCommand()<CR>
+inoremap <C-s><C-v> <Esc>:write<CR>:call VimuxRunLastCommand()<CR>
 
 " Inspect runner pane
 nnoremap <Leader>vi :VimuxInspectRunner<CR>
