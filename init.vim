@@ -36,7 +36,8 @@ Plug 'https://github.com/nanotech/jellybeans.vim'
 " programming
 Plug 'https://github.com/w0rp/ale'
 Plug 'https://github.com/honza/vim-snippets'
-Plug 'https://github.com/Yggdroot/indentLine'
+" Plug 'https://github.com/Yggdroot/indentLine'
+Plug 'https://github.com/nathanaelkane/vim-indent-guides'
 Plug 'https://github.com/Raimondi/delimitMate'
 Plug 'https://github.com/majutsushi/tagbar'
 Plug 'https://github.com/ervandew/supertab'
@@ -351,9 +352,24 @@ set expandtab
 
 " C의 구문에 맞게 들여쓰기 합니다
 set cindent
+
+" toggle cursorcolumn/cursorline
+nnoremap <Space>cc :call ToggleCursorColumn()<CR>
+nnoremap <Space>cl :call ToggleCursorColumn()<CR>
+function! ToggleCursorColumn()
+  if &cursorcolumn == 1
+    set cursorcolumn!
+    set cursorline!
+    echo "cursorcolumn/cursorline disabled"
+  else
+    set cursorcolumn
+    set cursorline
+    echo "cursorcolumn/cursorline enabled"
+  endif
+endfunction
 " }}}
 
-" QuickFix Window 설정                       {{{
+" quickfix Window 설정                       {{{
 " """"""""""""""""""""""""""""""""""""""""""""""
 " Quickfix Window Toggle
 nnoremap <leader>q :call QuickFixToggleC()<cr>
@@ -371,10 +387,8 @@ function! QuickFixToggleC()
 endfunction
 
 " QuickFix Window Navigation 키 매핑
-nnoremap <leader>j :cnext<cr>
-nnoremap <Down> :cnext<cr>
-nnoremap <leader>k :cprevious<cr>
-nnoremap <Up> :cprevious<cr>
+nnoremap <Space>j :cnext<cr>
+nnoremap <Space>k :cprevious<cr>
 
 " Winodws에서는 cp949를 utf-8로 바꿈
 " Quickfix Window 매뉴얼을 참고함.
@@ -598,13 +612,10 @@ let g:NERDTrimTrailingWhitespace = 1
 nnoremap <leader>tb :TagbarToggle<CR>
 " }}}
 
-" indentline : vertical line indentation      {{{
+" indentGuides                                {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
-let g:indentLine_color_term = 239
-let g:indentLine_color_gui = '#09AA08'
-let g:indentLine_char = '│'
-let g:indentLine_enabled = 0
-nnoremap <leader>i :IndentLinesToggle<cr>
+let g:indent_guides_guide_size = 1
+nnoremap <Space>ig :IndentGuidesToggle<cr>
 
 " }}}
 
