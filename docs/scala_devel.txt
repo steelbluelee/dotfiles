@@ -1,0 +1,42 @@
+scalafmt
+=========================================================================
+
+# see the homepage https://scalameta.org/scalafmt/
+
+curl -L -o $HOME/.bin/coursier https://git.io/vgvpD
+chmod +x $HOME/.bin/coursier
+coursier --help
+
+coursier bootstrap com.geirsson:scalafmt-cli_2.12:1.5.1 \
+  -r bintray:scalameta/maven \
+  -o $HOME/.bin/scalafmt --standalone --main org.scalafmt.cli.Cli
+
+sudo dnf install nailgun nailgun-javadoc
+
+coursier bootstrap --standalone com.geirsson:scalafmt-cli_2.12:1.5.1 \
+  -r bintray:scalameta/maven \
+  -o $HOME/.bin/scalafmt_ng -f --main com.martiansoftware.nailgun.NGServer
+
+# nailgun client install
+# download ng.c file from
+#     https://github.com/facebook/nailgun/tree/master/nailgun-client
+# gcc -O2 -o ng ng.c
+# cp ng $HOME/.bin/
+
+scalafmt_ng &
+ng ng-alias scalafmt org.scalafmt.cli.Cli
+ng scalafmt --version # should be 1.5.1
+
+#.vimrc
+nnoremap <Space>f :Autoformat<CR>
+let g:formatdef_scalafmt = "'scalafmt --stdin'"
+let g:formatters_scala = ['scalafmt']
+
+#.vimrc with nailgun
+noremap <F5> :Autoformat<CR>
+let g:formatdef_scalafmt = "'ng scalafmt --stdin'"
+let g:formatters_scala = ['scalafmt']
+
+scala language server & client
+========================================================================
+# see the homepage http://eed3si9n.com/sbt-server-with-neovim

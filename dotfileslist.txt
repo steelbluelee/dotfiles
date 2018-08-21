@@ -2,6 +2,8 @@ None .gitignore
 None README.md
 None backupdotfiles.py
 None dotfileslist.txt
+None docs/after_install.txt
+None docs/scala_devel.txt
 ~/.config/nvim/init.vim ~/backup/dotfiles/init.vim
 $HOME/.bashrc ~/backup/dotfiles/bash.rc
 ~/.tmux.conf ./tmux.conf

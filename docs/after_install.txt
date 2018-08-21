@@ -1,0 +1,10 @@
+Install ffmpeg
+============================
+sudo dnf config-manager --add-repo http://ftp.gwdg.de/pub/opensuse/repositories/home:/zhonghuaren/Fedora_28/
+rpm --import http://ftp.gwdg.de/pub/opensuse/repositories/home:/zhonghuaren/Fedora_28/repodata/repomd.xml.key
+sudo dnf install ffmpeg
+
+Install openh264
+============================
+sudo dnf config-manager --set-enabled fedora-cisco-openh264
+sudo dnf install gstreamer1-plugin-openh264 mozilla-openh264
