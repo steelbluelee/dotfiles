@@ -6,6 +6,7 @@ None docs/after_install.txt
 None docs/scala_devel.txt
 ~/.config/nvim/init.vim ~/backup/dotfiles/init.vim
 $HOME/.bashrc ~/backup/dotfiles/bash.rc
+$HOME/.bash_profile ~/backup/dotfiles/.bash_profile
 ~/.tmux.conf ./tmux.conf
 ~/.tmux.conf.local tmux.conf.local
 ~/.vimrc ~/backup/dotfiles/vim.rc
