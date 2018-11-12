@@ -43,24 +43,36 @@ Plug 'https://github.com/majutsushi/tagbar'
 Plug 'https://github.com/ervandew/supertab'
 Plug 'https://github.com/SirVer/ultisnips'
 Plug 'https://github.com/scrooloose/nerdcommenter'
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-endif
-
 " if has('nvim')
-"     Plug 'eed3si9n/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+"     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 " else
-"     Plug 'autozimu/LanguageClient-neovim', {
-"         \ 'branch': 'next',
-"         \ 'do': 'bash install.sh',
-"         \ }
+"     Plug 'Shougo/deoplete.nvim'
+"     Plug 'roxma/nvim-yarp'
+"     Plug 'roxma/vim-hug-neovim-rpc'
 " endif
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
+" ncm2 : autocomplete
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-tmux'
+Plug 'ncm2/ncm2-path'
+
+if has('nvim')
+    Plug 'eed3si9n/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh',
+        \ }
+endif
+" Plug 'prabirshrestha/async.vim'
+" Plug 'prabirshrestha/vim-lsp'
 
 
 " languages
@@ -74,7 +86,7 @@ Plug 'https://github.com/derekwyatt/vim-scala'
 Plug 'https://github.com/ktvoelker/sbt-vim'
 
 " python
-Plug 'zchee/deoplete-jedi'
+" Plug 'zchee/deoplete-jedi'
 
 " html, css, javascript, json
 Plug 'mattn/emmet-vim'
@@ -232,6 +244,11 @@ inoremap <leader><leader> <C-x><C-o>
 " toggle fold
 nnoremap <Space><Space> za
 " }}}
+
+" Terminal realted setup                     {{{
+" """"""""""""""""""""""""""""""""""""""""""""""
+tnoremap <leader>jk <C-\><C-n>
+"  }}}
 
 " preview window setup                       {{{
 " """"""""""""""""""""""""""""""""""""""""""""""
@@ -468,7 +485,7 @@ let g:airline_theme='luna'
 " NERTTree 토글 키 바인딩
 nnoremap <leader>n :NERDTreeToggle<CR>
 let NERDTreeAutoDeleteBuffer = 1
-autocmd vimenter * NERDTree
+" autocmd vimenter * NERDTree
 " }}}
 
 "  tmux / vimux 설정                          {{{
@@ -527,26 +544,38 @@ let g:VimuxRunnerType = "pane"
 " let g:VimuxRunnerType = "window"
 " }}}
 
+"  ncm2 설정                                  {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+" NERTTree 토글 키 바인딩
+" enable ncm2 for all buffers
+autocmd BufEnter * call ncm2#enable_for_buffer()
+
+" IMPORTANTE: :help Ncm2PopupOpen for more information
+set completeopt=noinsert,menuone,noselect
+
+" }}}
+
 " LanguageClient : LanguageClient-neovim, vim-lsp 설정{{{
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""
 " set signcolumn=yes
 " if has('nvim')
-" let g:LanguageClient_autoStart = 1
-" let g:LanguageClient_serverCommands = {
-"     \ 'scala': ['node', expand('~/.bin/sbt-server-stdio.js')]
-"     \ }
-" nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+let g:LanguageClient_autoStart = 1
+let g:LanguageClient_serverCommands = {
+    \ 'javascript': ['flow-language-server', '--stdio'],
+    \ 'scala': ['node', expand('~/.bin/sbt-server-stdio.js')],
+    \ }
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 " else
-    autocmd User lsp_setup call lsp#register_server({
-                    \ 'name': 'scala',
-                    \ 'cmd': {server_info->['sbt-server-stdio.js']},
-                    \ 'whitelist': ['scala'],
-                    \ })
-    let g:lsp_signs_enabled = 1         " enable signs
-    let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-    let g:lsp_signs_error = {'text': '✗'}
-    let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
-    let g:lsp_signs_hint = {'icon': '/path/to/some/other/icon'} " icons require GUI
+    " autocmd User lsp_setup call lsp#register_server({
+    "                 \ 'name': 'scala',
+    "                 \ 'cmd': {server_info->['sbt-server-stdio.js']},
+    "                 \ 'whitelist': ['scala'],
+    "                 \ })
+    " let g:lsp_signs_enabled = 1         " enable signs
+    " let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+    " let g:lsp_signs_error = {'text': '✗'}
+    " let g:lsp_signs_warning = {'text': '‼', 'icon': '/path/to/some/icon'} " icons require GUI
+    " let g:lsp_signs_hint = {'icon': '/path/to/some/other/icon'} " icons require GUI
 " endif
 " }}}
 
@@ -570,7 +599,7 @@ let g:deoplete#sources._=['buffer', 'member', 'file', 'tag', 'omni', 'ultisnips'
 
 " supertab settings                          {{{
 " """"""""""""""""""""""""""""""""""""""""""""""
-" let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
 " let g:SuperTabDefaultCompletionType = '<c-x><c-u>'
 " let g:SuperTabDefaultCompletionType = 'context'
 
@@ -675,6 +704,8 @@ augroup jsbeautify_group
     autocmd!
     autocmd FileType javascript vnoremap <buffer>  <SPACE>ff :call RangeJsBeautify()<cr>
     autocmd FileType javascript nnoremap <buffer>  <SPACE>ff mvggVG:call RangeJsBeautify()<cr>`v
+    autocmd FileType javascript nnoremap <buffer> <C-s><C-f> mvggVG:call RangeJsBeautify()<cr>`v:write<cr>
+    autocmd FileType javascript inoremap <buffer> <C-s><C-f> <Esc>mvggVG:call RangeJsBeautify()<cr>`v:write<cr>
     autocmd FileType json vnoremap <buffer> <SPACE>ff :call RangeJsonBeautify()<cr>
     autocmd FileType json nnoremap <buffer> <SPACE>ff mvggVG:call RangeJsonBeautify()<cr>`v
     autocmd FileType jsx vnoremap <buffer> <SPACE>ff :call RangeJsxBeautify()<cr>
@@ -695,5 +726,15 @@ augroup fish_group
     " autocmd FileType fish setlocal compiler fish
     autocmd FileType fish setlocal foldmethod=expr
 augroup END
+
+" }}}
+
+" java script                                 {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+let g:user_emmet_settings = {
+  \  'javascript.jsx' : {
+    \      'extends' : 'jsx',
+    \  },
+  \}
 
 " }}}
