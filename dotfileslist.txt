@@ -1,6 +1,7 @@
 None .gitignore
 None README.md
 None backupdotfiles.py
+None restoredotfiles.py
 None dotfileslist.txt
 None docs/after_install.txt
 None docs/scala_devel.txt
