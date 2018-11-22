@@ -90,7 +90,10 @@ Plug 'https://github.com/ktvoelker/sbt-vim'
 
 " html, css, javascript, json
 Plug 'mattn/emmet-vim'
-Plug 'https://github.com/maksimr/vim-jsbeautify'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'prettier/vim-prettier'
+Plug 'ternjs/tern_for_vim'
 
 " fish shell script
 Plug 'https://github.com/dag/vim-fish'
@@ -653,6 +656,13 @@ nnoremap <Space>ig :IndentGuidesToggle<cr>
 let g:delimitMate_expand_cr = 2
 " }}}
 
+" ale                                         {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+let g:ale_sign_error = '●' " Less aggressive than the default '>>'
+let g:ale_sign_warning = '.'
+let g:ale_lint_on_enter = 0 " Less distracting when opening a new file
+" }}}
+
 " java : eclim, gradle test                   {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
 augroup filetype_java_eclim
@@ -716,7 +726,16 @@ augroup jsbeautify_group
     autocmd FileType html inoremap <buffer> <C-s><C-f> <ESC>mvggVG:call RangeHtmlBeautify()<cr>`v:write<cr>
     autocmd FileType css vnoremap <buffer> <SPACE>ff :call RangeCSSBeautify()<cr>
     autocmd FileType css nnoremap <buffer> <SPACE>ff mvggVG:call RangeCSSBeautify()<cr>`v
+
+    autocmd FileType javascript setlocal ts=2
+    autocmd FileType javascript setlocal sw=2
+    autocmd FileType javascript.jsx setlocal ts=2
+    autocmd FileType javascript.jsx setlocal sw=2
 augroup END
+
+" print spaces between brackets
+" Prettier default: true
+let g:prettier#config#bracket_spacing = 'true'
 " }}}
 
 " fish script                                 {{{

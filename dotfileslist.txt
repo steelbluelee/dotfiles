@@ -18,3 +18,4 @@ $HOME/.bash_profile ~/backup/dotfiles/.bash_profile
 ~/.pylintrc ~/backup/dotfiles/pylint.rc
 ~/.scalafmt.conf ~/backup/dotfiles/scalafmt.conf
 ~/.inputrc ~/backup/dotfiles/input.rc
+~/.tern-project ~/backup/dotfiles/.tern-project
