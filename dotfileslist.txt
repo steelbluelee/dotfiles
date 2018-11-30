@@ -5,6 +5,7 @@ None restoredotfiles.py
 None dotfileslist.txt
 None docs/after_install.txt
 None docs/scala_devel.txt
+None docs/configuring_postgresql_after_install.txt
 ~/.config/nvim/init.vim ~/backup/dotfiles/init.vim
 $HOME/.bashrc ~/backup/dotfiles/bash.rc
 $HOME/.bash_profile ~/backup/dotfiles/.bash_profile

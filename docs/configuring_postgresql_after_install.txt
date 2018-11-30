@@ -1,0 +1,57 @@
+# in command line prompt
+# The \password is always stored encrypted in the system catalogs.
+# The ENCRYPTED keyword has no effect, but is accepted for backwards compatibility.
+~# sudo -u postgres psql
+~# ALTER USER postgres with encrypted password 'my_password';
+
+
+# /var/lib/pgsql/11/data/pg_hba.conf
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# "local" is for Unix domain socket connections only
+local   all             all                                     peer
+# IPv4 local connections:
+host    all             all             127.0.0.1/32            md5
+
+host    all             all             0.0.0.0/0               md5
+# IPv6 local connections:
+host    all             all             ::1/128                 md5
+# Allow replication connections from localhost, by a user with the
+# replication privilege.
+local   replication     all                                     peer
+host    replication     all             127.0.0.1/32            ident
+host    replication     all             ::1/128                 ident
+
+
+# /var/lib/pgsql/11/data/postgresql.conf
+
+listen_addresses = '*'          # what IP address(es) to listen on; 
+
+
+# in command line prompt
+~# systemctl restart postgresql-11
+
+
+# in command line prompt
+~# sudo firewall-cmd --permanent --zone=public --add-port=5432/tcp 
+~# firewall-cmd --reload
+# or
+~# firewall-cmd --permanent --zone=trusted --add-source=<Client IP address>/32
+~# firewall-cmd --permanent --zone=trusted --add-port=5432/tcp
+~# firewall-cmd --reload
+
+
+# in command line prompt
+# to add user and to create a database
+~# sudo -u postgres psql postgres
+postgres=# create user sentry;
+postgres=# create database sentrydb ENCODING 'UTF-8' ;
+postgres=# GRANT ALL PRIVILEGES ON DATABASE sentrydb TO sentry;
+postgres=# \password sentry
+
+
+# references
+https://blog.programster.org/configuring-postgresql-after-installation
+https://devops.profitbricks.com/tutorials/install-postgresql-on-centos-7/
+https://www.lesstif.com/pages/viewpage.action?pageId=31850584
