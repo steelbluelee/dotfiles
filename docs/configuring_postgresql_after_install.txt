@@ -51,6 +51,12 @@ postgres=# GRANT ALL PRIVILEGES ON DATABASE sentrydb TO sentry;
 postgres=# \password sentry
 
 
+# install pgadmin4
+~$ sudo dnf install pgadmin4
+# start pgadmin4
+~$ sudo python3 /usr/lib/python3.7/site-packages/pgadmin4-web/pgAdmin4.py
+# go to http://localhost:5050
+
 # references
 https://blog.programster.org/configuring-postgresql-after-installation
 https://devops.profitbricks.com/tutorials/install-postgresql-on-centos-7/
