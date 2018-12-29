@@ -1,9 +1,52 @@
 " $HOME/.config/nvim/init.vim
 " $HOME/.vimrc
 
-if &shell =~# 'fish$'
-    set shell=sh
+" if &shell =~# 'fish$'
+"     set shell=sh
+" endif
+
+" set omnifunc=syntaxcomplete#Complete
+set completeopt-=preview
+set completeopt+=menuone
+set completeopt+=noinsert
+set completeopt+=noselect
+" set dictionary+=/usr/share/dict/words
+" set completeopt=menu
+
+if filereadable("./dict.txt")
+    " set dictionary+=expand("%:p:h")
+    let &dictionary=expand("%:p:h") . "/dict.txt"
+    set complete+=k
 endif
+
+let g:UltiSnipsExpandTrigger = "<f5>"        " Do not use <tab>
+let g:UltiSnipsJumpForwardTrigger = "<C-i>"  " Do not use <c-j>
+
+augroup mucomplete
+    autocmd!
+    inoremap <silent> <expr> <plug>MyCR
+                \ mucomplete#ultisnips#expand_snippet("\<cr>")
+    imap <cr> <plug>MyCR
+
+    let g:mucomplete#chains = {}
+    let g:mucomplete#chains.markdown = ['keyn', 'dict', 'uspl']
+    let g:mucomplete#chains.vim = ['path', 'cmd', 'keyn']
+    let g:mucomplete#chains.default = [ 'incl', 'ulti',  'omni', 'path']
+    " let g:mucomplete#chains.default = ['ulti', 'incl',  'omni', 'path']
+    let g:mucomplete#completion_delay = 0
+
+    " imap <unique> <tab> <plug>(MUcompleteFwd)
+    " imap <unique> <S-tab> <plug>(MUcompleteBwd)
+augroup END
+let g:mucomplete#enable_auto_at_startup = 1
+
+augroup auto_ch_dir
+    autocmd!
+    " autocmd InsertEnter * let save_cwd = getcwd() | set autochdir
+    " autocmd InsertLeave * set noautochdir | execute 'cd' fnameescape(save_cwd)
+    autocmd InsertEnter * let save_cwd = getcwd() | lcd %:p:h
+    autocmd InsertLeave * execute 'cd' fnameescape(save_cwd)
+augroup END
 
 " vim-plug : vim plugins                 {{{
 """"""""""""""""""""""""""""""""""""""""""""""""
@@ -20,13 +63,14 @@ Plug 'https://github.com/skywind3000/asyncrun.vim'
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'https://github.com/tpope/vim-fugitive'
-" Plug 'https://github.com/christoomey/vim-tmux-navigator'
+Plug 'https://github.com/christoomey/vim-tmux-navigator'
 Plug 'https://github.com/airblade/vim-gitgutter'
 Plug 'https://github.com/benmills/vimux'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'https://github.com/moll/vim-bbye'
 Plug 'https://github.com/jlanzarotta/bufexplorer'
+" Plug 'kassio/neoterm'
 
 " colors
 Plug 'https://github.com/altercation/vim-colors-solarized'
@@ -35,12 +79,12 @@ Plug 'https://github.com/nanotech/jellybeans.vim'
 
 " programming
 Plug 'https://github.com/w0rp/ale'
-Plug 'https://github.com/honza/vim-snippets'
+" Plug 'https://github.com/honza/vim-snippets'
 " Plug 'https://github.com/Yggdroot/indentLine'
 Plug 'https://github.com/nathanaelkane/vim-indent-guides'
 Plug 'https://github.com/Raimondi/delimitMate'
 Plug 'https://github.com/majutsushi/tagbar'
-Plug 'https://github.com/ervandew/supertab'
+" Plug 'https://github.com/ervandew/supertab'
 Plug 'https://github.com/SirVer/ultisnips'
 Plug 'https://github.com/scrooloose/nerdcommenter'
 " if has('nvim')
@@ -55,22 +99,27 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ 'do': 'bash install.sh',
     \ }
 
+Plug 'https://github.com/lifepillar/vim-mucomplete'
+
+Plug 'https://github.com/tpope/vim-surround'
+Plug 'https://github.com/tpope/vim-repeat'
+
 " ncm2 : autocomplete
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
+" Plug 'ncm2/ncm2'
+" Plug 'roxma/nvim-yarp'
+"
+" Plug 'ncm2/ncm2-bufword'
+" Plug 'ncm2/ncm2-tmux'
+" Plug 'ncm2/ncm2-path'
 
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-tmux'
-Plug 'ncm2/ncm2-path'
-
-if has('nvim')
-    Plug 'eed3si9n/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-else
-    Plug 'autozimu/LanguageClient-neovim', {
-        \ 'branch': 'next',
-        \ 'do': 'bash install.sh',
-        \ }
-endif
+" if has('nvim')
+"     Plug 'eed3si9n/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+" else
+"     Plug 'autozimu/LanguageClient-neovim', {
+"         \ 'branch': 'next',
+"         \ 'do': 'bash install.sh',
+"         \ }
+" endif
 " Plug 'prabirshrestha/async.vim'
 " Plug 'prabirshrestha/vim-lsp'
 
@@ -92,11 +141,35 @@ Plug 'https://github.com/ktvoelker/sbt-vim'
 Plug 'mattn/emmet-vim'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
-Plug 'prettier/vim-prettier'
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'npm install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
+" Plug 'prettier/vim-prettier', { 'do': 'npm install' }
+" Plug 'prettier/vim-prettier'
 Plug 'ternjs/tern_for_vim'
+" Plug 'https://github.com/epilande/vim-react-snippets'
+Plug 'https://github.com/mlaursen/vim-react-snippets'
+Plug 'https://github.com/epilande/vim-es2015-snippets'
+" Plug 'https://github.com/steelsojka/deoplete-flow'
+" Plug 'carlitux/deoplete-ternjs'
+" Plug 'https://github.com/flowtype/vim-flow'
 
 " fish shell script
 Plug 'https://github.com/dag/vim-fish'
+
+" json
+Plug 'https://github.com/elzr/vim-json'
+
+" markdown
+" Plug 'https://github.com/shime/vim-livedown'
+" Plug 'https://github.com/suan/vim-instant-markdown'
+" Plug 'https://github.com/mgor/vim-markdown-grip'
+if has('nvim')
+    Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
+else
+    Plug 'https://github.com/iamcco/markdown-preview.vim'
+endif
+
 call plug#end()
 "  }}}
 
@@ -238,14 +311,30 @@ inoremap <C-s><C-g> <ESC>:Gwrite<CR>
 
 " copy & paste
 vnoremap <leader>y "+y
-nnoremap <leader>p "+p
-nnoremap <leader>P "+P
+nnoremap <leader>p o<ESC>"+p
+nnoremap <leader>P O<ESC>"+P
+
+" move lines
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
 
 " omnifunc
 inoremap <leader><leader> <C-x><C-o>
 
 " toggle fold
 nnoremap <Space><Space> za
+
+" complete, completion
+inoremap <C-k> <C-x><C-k>
+
+" tabedit current buffer && close the current tab
+" this setup is used instead of maximizing current
+" splited window  -- <C-w> + |, <C-w> + _
+nnoremap <Leader>te :tabedit %<CR>
+nnoremap <Leader>tc :tabclose<CR>
+nnoremap <Leader>tn :tabnew<CR>
 " }}}
 
 " Terminal realted setup                     {{{
@@ -547,27 +636,20 @@ let g:VimuxRunnerType = "pane"
 " let g:VimuxRunnerType = "window"
 " }}}
 
-"  ncm2 설정                                  {{{
-" """""""""""""""""""""""""""""""""""""""""""""""
-" NERTTree 토글 키 바인딩
-" enable ncm2 for all buffers
-autocmd BufEnter * call ncm2#enable_for_buffer()
-
-" IMPORTANTE: :help Ncm2PopupOpen for more information
-set completeopt=noinsert,menuone,noselect
-
-" }}}
-
 " LanguageClient : LanguageClient-neovim, vim-lsp 설정{{{
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""
 " set signcolumn=yes
 " if has('nvim')
 let g:LanguageClient_autoStart = 1
-let g:LanguageClient_serverCommands = {
-    \ 'javascript': ['flow-language-server', '--stdio'],
-    \ 'scala': ['node', expand('~/.bin/sbt-server-stdio.js')],
-    \ }
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+" let g:LanguageClient_serverCommands = {
+"     \ 'javascript': ['flow-language-server', '--stdio'],
+"     \ 'scala': ['node', expand('~/.bin/sbt-server-stdio.js')],
+"     \ }
+" let g:LanguageClient_serverCommands = {
+"     \ 'javascript': ['javascript-typescript-stdio'],
+"     \ 'scala': ['node', expand('~/.bin/sbt-server-stdio.js')],
+"     \ }
+" nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 " else
     " autocmd User lsp_setup call lsp#register_server({
     "                 \ 'name': 'scala',
@@ -585,26 +667,21 @@ nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 "  deoplete 설정                           {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
 " Use deoplete.
-let g:deoplete#enable_at_startup = 1
-" let g:deoplete#omni#input_patterns.scala = ['[^. *\t0-9]\.\w*',': [A-Z]\w', '[\[\t\( ][A-Za-z]\w*']
-let g:deoplete#enable_camel_case = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#enable_auto_select = 1
-
-if !exists('g:deoplete#sources#omni#input_patterns')
-  let g:deoplete#omni#input_patterns = {}
-endif
-
-let g:deoplete#sources={} 
-let g:deoplete#sources._=['buffer', 'member', 'file', 'tag', 'omni', 'ultisnips'] 
-" let g:deoplete#sources.scala = ['buffer', 'tags', 'omni']
+" let g:deoplete#enable_at_startup = 1
+" " let g:deoplete#omni#input_patterns.scala = ['[^. *\t0-9]\.\w*',': [A-Z]\w', '[\[\t\( ][A-Za-z]\w*']
+" call deoplete#custom#option('sources', {
+"     \ '_': ['buffer', 'omni', 'ultisnips', 'file'],
+"     \ 'cpp': ['buffer', 'tag'],
+" \})
 " }}}
 
 " supertab settings                          {{{
 " """"""""""""""""""""""""""""""""""""""""""""""
-let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+" let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+" let g:SuperTabDefaultCompletionType = '<c-x><c-n>'
 " let g:SuperTabDefaultCompletionType = '<c-x><c-u>'
-" let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
 
 " if has("gui_running")
 "   imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
@@ -696,9 +773,12 @@ autocmd BufEnter *.scala setl equalprg=scalafmt\ --config\ $HOME/.scalafmt.conf\
 
 " fzf                                         {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <C-x>ff :Files<cr>
-nnoremap <C-x>fl :Lines<cr>
-nnoremap <C-x>fb :BLines<cr>
+nnoremap <Space>f :Files<cr>
+nnoremap <M-f> :Files<cr>
+nnoremap <Space>l :Lines<cr>
+nnoremap <M-l> :Lines<cr>
+nnoremap <Space>b :Buffers<cr>
+nnoremap <M-b> :Buffers<cr>
 " }}}
 
 " python : jedi                               {{{
@@ -712,12 +792,10 @@ let g:jedi#force_py_version=3
 " """""""""""""""""""""""""""""""""""""""""""""""
 augroup jsbeautify_group
     autocmd!
-    autocmd FileType javascript vnoremap <buffer>  <SPACE>ff :call RangeJsBeautify()<cr>
-    autocmd FileType javascript nnoremap <buffer>  <SPACE>ff mvggVG:call RangeJsBeautify()<cr>`v
-    autocmd FileType javascript nnoremap <buffer> <C-s><C-f> mvggVG:call RangeJsBeautify()<cr>`v:write<cr>
-    autocmd FileType javascript inoremap <buffer> <C-s><C-f> <Esc>mvggVG:call RangeJsBeautify()<cr>`v:write<cr>
-    autocmd FileType json vnoremap <buffer> <SPACE>ff :call RangeJsonBeautify()<cr>
-    autocmd FileType json nnoremap <buffer> <SPACE>ff mvggVG:call RangeJsonBeautify()<cr>`v
+    autocmd FileType javascript nnoremap <buffer> <C-s><C-f> :Prettier<CR>:write<CR>
+    autocmd FileType javascript inoremap <buffer> <C-s><C-f> <ESC>:Prettier<CR>:write<CR>
+    autocmd FileType json nnoremap <buffer> <C-s><C-f> :Prettier<CR>:write<CR>
+    autocmd FileType json inoremap <buffer> <C-s><C-f> <ESC>:Prettier<CR>:write<CR>
     autocmd FileType jsx vnoremap <buffer> <SPACE>ff :call RangeJsxBeautify()<cr>
     autocmd FileType jsx nnoremap <buffer> <SPACE>ff mvggVG:call RangeJsxBeautify()<cr>`v
     autocmd FileType html vnoremap <buffer> <SPACE>ff :call RangeHtmlBeautify()<cr>
@@ -736,6 +814,12 @@ augroup END
 " print spaces between brackets
 " Prettier default: true
 let g:prettier#config#bracket_spacing = 'true'
+
+" json conceal
+augroup json_concealing
+    autocmd InsertEnter *.json setlocal conceallevel=2 concealcursor=
+    autocmd InsertLeave *.json setlocal conceallevel=2 concealcursor=inc
+augroup END
 " }}}
 
 " fish script                                 {{{
@@ -755,5 +839,15 @@ let g:user_emmet_settings = {
     \      'extends' : 'jsx',
     \  },
   \}
+
+" }}}
+
+" markdown                                    {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+augroup markdown_key_bindings
+    autocmd!
+    autocmd FileType markdown nnoremap <buffer> <localleader>v :MarkdownPreview<CR>
+    autocmd FileType markdown nnoremap <buffer> <localleader>c :MarkdownPreviewStop<CR>
+augroup END
 
 " }}}

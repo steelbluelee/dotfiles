@@ -1,13 +1,12 @@
-{
-  "libs": [
-    "browser",
-    "ecmascript",
-    "jquery",
-    "react",
-    "underscore"
-  ],
-  "plugins": {
-    "node": {},
-    "esmodules": {}
-  }
-}
+ {
+   "libs": [
+     "browser",
+     "jquery",
+     "react"
+   ],
+   "plugins": {
+       "doc_comment": null,
+       "angular": {},
+       "node": {}
+   }
+ }
