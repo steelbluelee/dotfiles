@@ -22,22 +22,20 @@ endif
 let g:UltiSnipsExpandTrigger = "<f5>"        " Do not use <tab>
 let g:UltiSnipsJumpForwardTrigger = "<C-i>"  " Do not use <c-j>
 
-augroup mucomplete
-    autocmd!
-    inoremap <silent> <expr> <plug>MyCR
-                \ mucomplete#ultisnips#expand_snippet("\<cr>")
-    imap <cr> <plug>MyCR
+inoremap <silent> <expr> <plug>MyCR
+            \ mucomplete#ultisnips#expand_snippet("\<cr>")
+imap <cr> <plug>MyCR
 
-    let g:mucomplete#chains = {}
-    let g:mucomplete#chains.markdown = ['keyn', 'dict', 'uspl']
-    let g:mucomplete#chains.vim = ['path', 'cmd', 'keyn']
-    let g:mucomplete#chains.default = [ 'incl', 'ulti',  'omni', 'path']
-    " let g:mucomplete#chains.default = ['ulti', 'incl',  'omni', 'path']
-    let g:mucomplete#completion_delay = 0
+let g:mucomplete#chains = {}
+let g:mucomplete#chains.markdown = ['keyn', 'dict', 'uspl']
+let g:mucomplete#chains.vim = ['path', 'cmd', 'keyn']
+let g:mucomplete#chains.default = [ 'ulti', 'incl', 'omni', 'path']
+let g:mucomplete#completion_delay = 0
 
-    " imap <unique> <tab> <plug>(MUcompleteFwd)
-    " imap <unique> <S-tab> <plug>(MUcompleteBwd)
-augroup END
+imap <tab> <plug>(MUcompleteFwd)
+imap <S-tab> <plug>(MUcompleteBwd)
+" imap <unique> <tab> <plug>(MUcompleteFwd)
+" imap <unique> <S-tab> <plug>(MUcompleteBwd)
 let g:mucomplete#enable_auto_at_startup = 1
 
 augroup auto_ch_dir
