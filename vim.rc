@@ -60,8 +60,10 @@ augroup auto_ch_dir
     autocmd InsertLeave * execute 'cd' fnameescape(save_cwd)
 augroup END
 
-nnoremap <A-n> :lnext<CR>
-nnoremap <A-p> :lprevious<CR>
+nnoremap <A-l><A-n> :lnext<CR>
+nnoremap <A-l><A-p> :lprevious<CR>
+nnoremap <A-l><A-f> :lfirst<CR>
+nnoremap <A-l><A-l> :llast<CR>
 
 " vim-plug : vim plugins                 {{{
 """"""""""""""""""""""""""""""""""""""""""""""""
@@ -358,9 +360,14 @@ nnoremap <Leader>tc :tabclose<CR>
 nnoremap <Leader>tn :tabnew<CR>
 " }}}
 
-" Terminal realted setup                     {{{
+" terminal realted setup                     {{{
 " """"""""""""""""""""""""""""""""""""""""""""""
 tnoremap <leader>jk <C-\><C-n>
+tnoremap <C-h> <C-\><C-N><C-w>h
+tnoremap <C-j> <C-\><C-N><C-w>j
+tnoremap <C-k> <C-\><C-N><C-w>k
+tnoremap <C-l> <C-\><C-N><C-w>l
+tnoremap <A-m><A-m> <C-\><C-N>:MaximizerToggle<CR>a
 "  }}}
 
 " preview window setup                       {{{
