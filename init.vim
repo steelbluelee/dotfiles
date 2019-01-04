@@ -4,35 +4,6 @@
 " if &shell =~# 'fish$'
 "     set shell=sh
 " endif
-" maximize the current window
-"
-" nnoremap <C-W>O :call MaximizeToggle()<CR>
-" nnoremap <C-W>o :call MaximizeToggle()<CR>
-" nnoremap <C-W><C-O> :call MaximizeToggle()<CR>
-"
-" function! MaximizeToggle()
-"   if exists("s:maximize_session")
-"     exec "source " . s:maximize_session
-"     call delete(s:maximize_session)
-"     unlet s:maximize_session
-"     let &hidden=s:maximize_hidden_save
-"     unlet s:maximize_hidden_save
-"     if s:maximize_is_nerdtree_open
-"         exec "NERDTreeToggle"
-"     endif
-"     unlet s:maximize_is_nerdtree_open
-"   else
-"     if exists("b:NERDTree")
-"         let s:maximize_is_nerdtree_open = 1
-"         exec "NERDTreeToggle"
-"     endif
-"     let s:maximize_hidden_save = &hidden
-"     let s:maximize_session = tempname()
-"     set hidden
-"     exec "mksession! " . s:maximize_session
-"     only
-"   endif
-" endfunction
 
 " open the current windows in a new tab.
 " this is like maximizing the current windows.
@@ -46,6 +17,7 @@ nnoremap td :tabclose<CR>
 nnoremap <Leader>tn :tabnew<CR>
 nnoremap tp :tabprevious<CR>
 nnoremap tn :tabnext<CR>
+nnoremap <A-t><A-t> :tabnext<CR>
 
 " set omnifunc=syntaxcomplete#Complete
 set completeopt-=preview
@@ -232,6 +204,8 @@ let mapleader=","
 
 " <localmapleader>를 ;으로 변경
 let maplocalleader=";"
+" ;;를 ;로 매핑
+nnoremap ;; ;
 
 " <space>를 za로 바인딩 :
 " nnoremap <Enter> za
@@ -611,6 +585,11 @@ let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_theme='luna'
 " let g:airline_theme='murmur'
 " let g:airline_theme='wombat'
+" }}}
+
+" vim maximizer setup                      {{{
+" """"""""""""""""""""""""""""""""""""""""""""""
+let g:maximizer_default_mapping_key = '<A-m><A-m>'
 " }}}
 
 " AsyncRun 설정                              {{{
