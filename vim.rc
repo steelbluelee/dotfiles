@@ -4,6 +4,48 @@
 " if &shell =~# 'fish$'
 "     set shell=sh
 " endif
+" maximize the current window
+"
+" nnoremap <C-W>O :call MaximizeToggle()<CR>
+" nnoremap <C-W>o :call MaximizeToggle()<CR>
+" nnoremap <C-W><C-O> :call MaximizeToggle()<CR>
+"
+" function! MaximizeToggle()
+"   if exists("s:maximize_session")
+"     exec "source " . s:maximize_session
+"     call delete(s:maximize_session)
+"     unlet s:maximize_session
+"     let &hidden=s:maximize_hidden_save
+"     unlet s:maximize_hidden_save
+"     if s:maximize_is_nerdtree_open
+"         exec "NERDTreeToggle"
+"     endif
+"     unlet s:maximize_is_nerdtree_open
+"   else
+"     if exists("b:NERDTree")
+"         let s:maximize_is_nerdtree_open = 1
+"         exec "NERDTreeToggle"
+"     endif
+"     let s:maximize_hidden_save = &hidden
+"     let s:maximize_session = tempname()
+"     set hidden
+"     exec "mksession! " . s:maximize_session
+"     only
+"   endif
+" endfunction
+
+" open the current windows in a new tab.
+" this is like maximizing the current windows.
+function! OpenCurrentAsNewTab()
+    let l:currentPos = getcurpos()
+    tabedit %
+    call setpos(".", l:currentPos)
+endfunction
+nnoremap t% :call OpenCurrentAsNewTab()<CR>
+nnoremap td :tabclose<CR>
+nnoremap <Leader>tn :tabnew<CR>
+nnoremap tp :tabprevious<CR>
+nnoremap tn :tabnext<CR>
 
 " set omnifunc=syntaxcomplete#Complete
 set completeopt-=preview
@@ -46,6 +88,9 @@ augroup auto_ch_dir
     autocmd InsertLeave * execute 'cd' fnameescape(save_cwd)
 augroup END
 
+nnoremap <A-n> :lnext<CR>
+nnoremap <A-p> :lprevious<CR>
+
 " vim-plug : vim plugins                 {{{
 """"""""""""""""""""""""""""""""""""""""""""""""
 if has('nvim')
@@ -69,6 +114,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'https://github.com/moll/vim-bbye'
 Plug 'https://github.com/jlanzarotta/bufexplorer'
 " Plug 'kassio/neoterm'
+Plug 'https://github.com/szw/vim-maximizer'
 
 " colors
 Plug 'https://github.com/altercation/vim-colors-solarized'
@@ -144,7 +190,7 @@ Plug 'prettier/vim-prettier', {
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'yaml', 'html'] }
 " Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 " Plug 'prettier/vim-prettier'
-Plug 'ternjs/tern_for_vim'
+Plug 'ternjs/tern_for_vim', { 'do': 'npm install'}
 " Plug 'https://github.com/epilande/vim-react-snippets'
 Plug 'https://github.com/mlaursen/vim-react-snippets'
 Plug 'https://github.com/epilande/vim-es2015-snippets'
@@ -262,7 +308,10 @@ function! CheckLeftBuffers()
     unlet i
   endif
 endfunction
-autocmd BufEnter * call CheckLeftBuffers()
+augroup close_vim
+    autocmd!
+    autocmd BufEnter * call CheckLeftBuffers()
+augroup END
 
 " }}}
 
