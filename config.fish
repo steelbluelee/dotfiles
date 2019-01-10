@@ -4,3 +4,7 @@ set -gx EDITOR nvim
 # set fish_key_bindings fish_vi_key_bindings
 set fish_key_bindings fish_user_key_bindings
 set -g theme_display_date no
+
+# if test (grep Micosoft /proc/version)
+    umask 0022
+# end

@@ -198,7 +198,7 @@ set t_Co=256
 
 " colorscheme wombat256mod
 " colorscheme solarized
-" set background=dark
+" set background=light
 colorscheme jellybeans
 
 " <leader> key를 ,로 변경
