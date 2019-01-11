@@ -36,9 +36,6 @@ endif
 let g:UltiSnipsExpandTrigger = "<f5>"        " Do not use <tab>
 let g:UltiSnipsJumpForwardTrigger = "<C-i>"  " Do not use <c-j>
 
-" inoremap <silent> <expr> <plug>MyCR
-"             \ mucomplete#ultisnips#expand_snippet("\<cr>")
-" imap <cr> <plug>MyCR
 
 let g:mucomplete#chains = {}
 let g:mucomplete#chains.markdown = ['keyn', 'dict', 'uspl']
@@ -100,7 +97,8 @@ Plug 'https://github.com/w0rp/ale'
 " Plug 'https://github.com/honza/vim-snippets'
 " Plug 'https://github.com/Yggdroot/indentLine'
 Plug 'https://github.com/nathanaelkane/vim-indent-guides'
-Plug 'https://github.com/Raimondi/delimitMate'
+" Plug 'https://github.com/Raimondi/delimitMate'
+Plug 'https://github.com/jiangmiao/auto-pairs'
 Plug 'https://github.com/majutsushi/tagbar'
 " Plug 'https://github.com/ervandew/supertab'
 Plug 'https://github.com/SirVer/ultisnips'
@@ -611,6 +609,18 @@ let g:maximizer_default_mapping_key = '<A-m><A-m>'
 nnoremap <leader>n :NERDTreeToggle<CR>
 let NERDTreeAutoDeleteBuffer = 1
 " autocmd vimenter * NERDTree
+" }}}
+
+"  mucomplete                               {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+inoremap <silent> <expr> <cr>
+      \ mucomplete#ultisnips#expand_snippet("\<cr>")
+
+let g:AutoPairsMapSpace = 0
+imap <silent> <expr> <space> pumvisible()
+    \ ? "<space>"
+    \ : "<c-r>=AutoPairsSpace()<cr>"
+
 " }}}
 
 "  tmux / vimux 설정                          {{{
