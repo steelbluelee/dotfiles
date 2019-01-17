@@ -5,6 +5,15 @@
 "     set shell=sh
 " endif
 
+let g:dbext_default_profile_dragonStack='type=pgsql:host=192.168.99.100:user=node_user:dbname=dragonstack'
+
+augroup project_dragonstack
+    autocmd!
+    autocmd BufRead */dragonstack/backend/bin/sql/* DBSetOption profile=dragonStack
+augroup END
+
+set completefunc=syntaxcomplete#Complete
+
 " open the current windows in a new tab.
 " this is like maximizing the current windows.
 function! OpenCurrentAsNewTab()
@@ -41,6 +50,7 @@ let g:mucomplete#chains = {}
 let g:mucomplete#chains.markdown = ['keyn', 'dict', 'uspl']
 let g:mucomplete#chains.vim = ['path', 'cmd', 'keyn']
 let g:mucomplete#chains.default = [ 'ulti', 'incl', 'omni', 'path']
+let g:mucomplete#chains.sql = [ 'incl', 'user', 'omni', 'path']
 let g:mucomplete#completion_delay = 0
 
 imap <tab> <plug>(MUcompleteFwd)
@@ -185,6 +195,10 @@ if has('nvim')
 else
     Plug 'https://github.com/iamcco/markdown-preview.vim'
 endif
+
+" database : postgresql,
+Plug 'https://github.com/vim-scripts/dbext.vim'
+Plug 'https://github.com/lifepillar/pgsql.vim'
 
 call plug#end()
 "  }}}
@@ -891,6 +905,16 @@ augroup markdown_key_bindings
     autocmd!
     autocmd FileType markdown nnoremap <buffer> <localleader>v :MarkdownPreview<CR>
     autocmd FileType markdown nnoremap <buffer> <localleader>c :MarkdownPreviewStop<CR>
+augroup END
+" }}}
+
+"" sql                                         {{{
+" """""""""""""""""""""""""""""""""""""""""""""""
+augroup markdown_key_bindings
+    autocmd!
+    autocmd FileType sql nnoremap <buffer> <CR><CR> :DBExecSQLUnderCursor<CR>
+    autocmd FileType sql vnoremap <buffer> <CR><CR> :DBExecVisualSQL<CR>
+    autocmd FileType sql nnoremap <buffer> <CR>% :DBExecRangeSQL<CR>
 augroup END
 
 " }}}
