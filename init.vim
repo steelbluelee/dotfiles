@@ -5,7 +5,7 @@
 "     set shell=sh
 " endif
 
-let g:dbext_default_profile_dragonStack='type=pgsql:host=192.168.99.100:user=node_user:dbname=dragonstack'
+let g:dbext_default_profile_dragonStack='type=pgsql:host=localhost:user=node_user:dbname=dragonstack'
 
 augroup project_dragonstack
     autocmd!
@@ -101,6 +101,11 @@ Plug 'https://github.com/szw/vim-maximizer'
 Plug 'https://github.com/altercation/vim-colors-solarized'
 Plug 'https://github.com/vim-scripts/wombat256.vim'
 Plug 'https://github.com/nanotech/jellybeans.vim'
+Plug 'https://github.com/NLKNguyen/papercolor-theme'
+Plug 'chriskempson/base16-vim'
+Plug 'https://github.com/tyrannicaltoucan/vim-quantum'
+Plug 'https://github.com/baskerville/bubblegum'
+Plug 'https://github.com/chriskempson/vim-tomorrow-theme'
 
 " programming
 Plug 'https://github.com/w0rp/ale'
@@ -199,6 +204,7 @@ endif
 " database : postgresql,
 Plug 'https://github.com/vim-scripts/dbext.vim'
 Plug 'https://github.com/lifepillar/pgsql.vim'
+Plug 'b4b4r07/vim-sqlfmt'
 
 call plug#end()
 "  }}}
@@ -206,12 +212,17 @@ call plug#end()
 " VI 기본 설정                               {{{
 """"""""""""""""""""""""""""""""""""""""""""""""
 
-set t_Co=256
+" This may or may not be needed
+" set t_Co=256
 
 " colorscheme wombat256mod
 " colorscheme solarized
+" colorscheme jellybeans
+colorscheme PaperColor
 " set background=light
-colorscheme jellybeans
+" colorscheme bubblegum-256-light
+" colorscheme Tomorrow
+
 
 " <leader> key를 ,로 변경
 let mapleader=","
@@ -601,9 +612,10 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
-let g:airline_theme='luna'
+" let g:airline_theme='luna'
 " let g:airline_theme='murmur'
 " let g:airline_theme='wombat'
+let g:airline_theme='bubblegum'
 " }}}
 
 " vim maximizer setup                      {{{
@@ -910,11 +922,18 @@ augroup END
 
 "" sql                                         {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
-augroup markdown_key_bindings
+let g:sqlfmt_command = "sqlformat"
+let g:sqlfmt_options = "-r -k upper"
+
+augroup sql_key_bindings
     autocmd!
     autocmd FileType sql nnoremap <buffer> <CR><CR> :DBExecSQLUnderCursor<CR>
     autocmd FileType sql vnoremap <buffer> <CR><CR> :DBExecVisualSQL<CR>
     autocmd FileType sql nnoremap <buffer> <CR>% :DBExecRangeSQL<CR>
+
+    autocmd FileType sql nnoremap <buffer> <C-s><C-f> :SQLFmt<CR>:write<CR>
+    autocmd FileType sql inoremap <buffer> <C-s><C-f> <ESC>:SQLFmt<CR>:write<CR>
 augroup END
+
 
 " }}}
