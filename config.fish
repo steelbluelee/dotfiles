@@ -3,6 +3,8 @@ set -gx PATH $HOME/.bin $HOME/.local/bin $HOME/.gem/ruby/2.5.0/bin $HOME/go/bin 
 set -gx EDITOR nvim
 # set fish_key_bindings fish_vi_key_bindings
 set fish_key_bindings fish_user_key_bindings
+bind -M insert \cf forward-char
+
 set -g theme_display_date no
 
 set fish_color_escape 'orange' '--bold'
@@ -22,3 +24,5 @@ set -g man_underline -u 586e75
 
 # this if for bobthefish theme
 set -g theme_color_scheme gruvbox
+# set -g theme_color_scheme solarized-dark
+

@@ -218,9 +218,9 @@ call plug#end()
 " colorscheme wombat256mod
 " colorscheme solarized
 " colorscheme jellybeans
-colorscheme PaperColor
+" colorscheme PaperColor
 " set background=light
-" colorscheme bubblegum-256-light
+colorscheme bubblegum-256-light
 " colorscheme Tomorrow
 
 
@@ -414,10 +414,11 @@ nnoremap <leader>bw :Bwipeout<cr>
 " """"""""""""""""""""""""""""""""""""""""""""""
 " search key mapping for search to use
 " very magical regular expression
-nnoremap / /\v
+" nnoremap / :set hlsearch<cr>/
+nnoremap / :set hlsearch<CR>/\v
 onoremap / /\v
 vnoremap / /\v
-nnoremap ? ?\v
+nnoremap ? :set hlsearch<CR>?\v
 onoremap ? ?\v
 vnoremap ? ?\v
 
@@ -425,8 +426,9 @@ vnoremap ? ?\v
 set incsearch
 
 " hlsearch key mappings
-nnoremap <leader>h :set hlsearch<cr>
-nnoremap <leader>H :set nohlsearch<cr>
+" nnoremap <leader>h :set hlsearch<cr>
+" nnoremap <leader>H :set nohlsearch<cr>
+nnoremap <silent><expr> <Leader>h (&hls && v:hlsearch ? ':nohlsearch' : ':set hlsearch')."\n"
 "  }}}
 
 " grep                                       {{{
@@ -612,10 +614,11 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
-" let g:airline_theme='luna'
+let g:airline_theme='luna'
 " let g:airline_theme='murmur'
 " let g:airline_theme='wombat'
-let g:airline_theme='bubblegum'
+" let g:airline_theme='bubblegum'
+" let g:airline_theme='molokai'
 " }}}
 
 " vim maximizer setup                      {{{
