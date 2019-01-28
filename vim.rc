@@ -106,6 +106,9 @@ Plug 'chriskempson/base16-vim'
 Plug 'https://github.com/tyrannicaltoucan/vim-quantum'
 Plug 'https://github.com/baskerville/bubblegum'
 Plug 'https://github.com/chriskempson/vim-tomorrow-theme'
+Plug 'rakr/vim-one'
+Plug 'https://github.com/endel/vim-github-colorscheme'
+Plug 'https://github.com/scheakur/vim-scheakur'
 
 " programming
 Plug 'https://github.com/w0rp/ale'
@@ -205,6 +208,8 @@ endif
 Plug 'https://github.com/vim-scripts/dbext.vim'
 Plug 'https://github.com/lifepillar/pgsql.vim'
 Plug 'b4b4r07/vim-sqlfmt'
+Plug 'https://github.com/vim-scripts/SQLUtilities'
+Plug 'https://github.com/vim-scripts/Align'
 
 call plug#end()
 "  }}}
@@ -214,15 +219,16 @@ call plug#end()
 
 " This may or may not be needed
 " set t_Co=256
+set termguicolors
 
 " colorscheme wombat256mod
 " colorscheme solarized
 " colorscheme jellybeans
-" colorscheme PaperColor
-" set background=light
-colorscheme bubblegum-256-light
+colorscheme PaperColor
+set background=light
+" colorscheme bubblegum-256-light
 " colorscheme Tomorrow
-
+" colorscheme one
 
 " <leader> key를 ,로 변경
 let mapleader=","
@@ -614,11 +620,13 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
-let g:airline_theme='luna'
-" let g:airline_theme='murmur'
 " let g:airline_theme='wombat'
-" let g:airline_theme='bubblegum'
-" let g:airline_theme='molokai'
+let g:airline_theme='molokai'
+" let g:airline_theme='papercolor'
+" let g:airline_theme='sol'
+" let g:airline_theme='luna'
+" let g:airline_theme='one'
+" let g:airline_theme='base16'
 " }}}
 
 " vim maximizer setup                      {{{

@@ -23,6 +23,6 @@ set -g man_underline -u 586e75
 # set -g man_underline -u 93a1a1
 
 # this if for bobthefish theme
-set -g theme_color_scheme gruvbox
+# set -g theme_color_scheme gruvbox
+set -g theme_color_scheme base16
 # set -g theme_color_scheme solarized-dark
-
