@@ -7,8 +7,8 @@ bind -M insert \cf forward-char
 
 set -g theme_display_date no
 
-set fish_color_escape 'orange' '--bold'
-set fish_color_operator 'orange'
+# set fish_color_escape 'orange' '--bold'
+# set fish_color_operator 'orange'
 
 # Solarized Light & Magenta highlight for man page
 set -g man_blink -o red

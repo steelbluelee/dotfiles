@@ -4,7 +4,7 @@
 " if &shell =~# 'fish$'
 "     set shell=sh
 " endif
-
+let g:ale_vim_vint_executable='vint'
 let g:dbext_default_profile_dragonStack='type=pgsql:host=localhost:user=node_user:dbname=dragonstack'
 
 augroup project_dragonstack
@@ -19,7 +19,7 @@ set completefunc=syntaxcomplete#Complete
 function! OpenCurrentAsNewTab()
     let l:currentPos = getcurpos()
     tabedit %
-    call setpos(".", l:currentPos)
+    call setpos('.', l:currentPos)
 endfunction
 nnoremap t% :call OpenCurrentAsNewTab()<CR>
 nnoremap td :tabclose<CR>
@@ -36,14 +36,14 @@ set completeopt+=noselect
 " set dictionary+=/usr/share/dict/words
 " set completeopt=menu
 
-if filereadable("./dict.txt")
+if filereadable('./dict.txt')
     " set dictionary+=expand("%:p:h")
-    let &dictionary=expand("%:p:h") . "/dict.txt"
+    let &dictionary=expand('%:p:h') . '/dict.txt'
     set complete+=k
 endif
 
-let g:UltiSnipsExpandTrigger = "<f5>"        " Do not use <tab>
-let g:UltiSnipsJumpForwardTrigger = "<C-i>"  " Do not use <c-j>
+let g:UltiSnipsExpandTrigger = '<f5>'        " Do not use <tab>
+let g:UltiSnipsJumpForwardTrigger = '<C-i>'  " Do not use <c-j>
 
 
 let g:mucomplete#chains = {}
@@ -67,10 +67,49 @@ augroup auto_ch_dir
     autocmd InsertLeave * execute 'cd' fnameescape(save_cwd)
 augroup END
 
-nnoremap <A-l><A-n> :lnext<CR>
-nnoremap <A-l><A-p> :lprevious<CR>
-nnoremap <A-l><A-f> :lfirst<CR>
-nnoremap <A-l><A-l> :llast<CR>
+" nnoremap <A-l><A-n> :lnext<CR>
+" nnoremap <A-l><A-p> :lprevious<CR>
+" nnoremap <A-l><A-f> :lfirst<CR>
+" nnoremap <A-l><A-l> :llast<CR>
+nnoremap <A-c><A-l> :let g:which_navigator="linter"<CR>
+nnoremap <A-c><A-c> :let g:which_navigator="quickfix"<CR>
+" function! ToggleLinterQuickFixWindow()
+"
+" endfunction
+let g:which_navigator='linter'
+function! GoToTheFirst()
+    if g:which_navigator ==# 'quickfix'
+        cfirst
+    else
+        lfirst
+    endif
+endfunction
+function! GoToTheNext()
+    if g:which_navigator ==# 'quickfix'
+        cnext
+    else
+        lnext
+    endif
+endfunction
+function! GoToThePrevious()
+    if g:which_navigator ==# 'quickfix'
+        cprevious
+    else
+        lprevious
+    endif
+endfunction
+function! GoToTheLast()
+    if g:which_navigator ==# 'quickfix'
+        clast
+    else
+        llast
+    endif
+endfunction
+
+nnoremap <A-f> :call GoToTheFirst()<CR>
+nnoremap <A-j> :call GoToTheNext()<CR>
+nnoremap <A-k> :call GoToThePrevious()<CR>
+nnoremap <A-l> :call GoToTheLast()<CR>
 
 " vim-plug : vim plugins                 {{{
 """"""""""""""""""""""""""""""""""""""""""""""""
@@ -109,6 +148,7 @@ Plug 'https://github.com/chriskempson/vim-tomorrow-theme'
 Plug 'rakr/vim-one'
 Plug 'https://github.com/endel/vim-github-colorscheme'
 Plug 'https://github.com/scheakur/vim-scheakur'
+Plug 'https://github.com/tomasr/molokai'
 
 " programming
 Plug 'https://github.com/w0rp/ale'
@@ -221,20 +261,22 @@ call plug#end()
 " set t_Co=256
 set termguicolors
 
+" colorscheme molokai
 " colorscheme wombat256mod
 " colorscheme solarized
 " colorscheme jellybeans
-colorscheme PaperColor
-set background=light
 " colorscheme bubblegum-256-light
 " colorscheme Tomorrow
 " colorscheme one
+colorscheme PaperColor
+set background=light
+" set background=dark
 
 " <leader> key를 ,로 변경
-let mapleader=","
+let mapleader=','
 
 " <localmapleader>를 ;으로 변경
-let maplocalleader=";"
+let maplocalleader=';'
 " ;;를 ;로 매핑
 nnoremap ;; ;
 
@@ -258,7 +300,7 @@ filetype plugin indent on
 set history=100
 
 " 함수 닫기표시
-set sm
+set showmatch
 
 " 타이핑시 마우스 커서 감추기
 set mousehide
@@ -290,18 +332,21 @@ filetype plugin on
 " 경고 소리와 경고 화면 깜빡임을 끈다.
 " set visualbell
 set noerrorbells visualbell t_vb=
-autocmd GUIEnter * set visualbell t_vb=
+augroup turn_off_visualbell
+    autocmd!
+    autocmd GUIEnter * set visualbell t_vb=
+augroup END
 
 " Automatically Quit Vim if Actual Files are Closed
 function! CheckLeftBuffers()
   if tabpagenr('$') == 1
     let i = 1
     while i <= winnr('$')
-      if getbufvar(winbufnr(i), '&buftype') == 'help' ||
-          \ getbufvar(winbufnr(i), '&buftype') == 'quickfix' ||
+      if getbufvar(winbufnr(i), '&buftype') ==? 'help' ||
+          \ getbufvar(winbufnr(i), '&buftype') ==? 'quickfix' ||
           \ exists('t:NERDTreeBufName') &&
           \   bufname(winbufnr(i)) == t:NERDTreeBufName ||
-          \ bufname(winbufnr(i)) == '__Tag_List__'
+          \ bufname(winbufnr(i)) ==? '__Tag_List__'
         let i += 1
       else
         break
@@ -367,10 +412,10 @@ nnoremap <leader>p o<ESC>"+p
 nnoremap <leader>P O<ESC>"+P
 
 " move lines
-nnoremap <A-j> :m .+1<CR>==
-nnoremap <A-k> :m .-2<CR>==
-vnoremap <A-j> :m '>+1<CR>gv=gv
-vnoremap <A-k> :m '<-2<CR>gv=gv
+nnoremap <A-d> :m .+1<CR>==
+nnoremap <A-u> :m .-2<CR>==
+vnoremap <A-d> :m '>+1<CR>gv=gv
+vnoremap <A-u> :m '<-2<CR>gv=gv
 
 " omnifunc
 inoremap <leader><leader> <C-x><C-o>
@@ -457,6 +502,7 @@ cnoremap grep AsyncRun grep -nH -R
 " """"""""""""""""""""""""""""""""""""""""""""""
 " 기본 엔코딩 : utf-8
 set encoding=utf-8
+scriptencoding utf-8
 set fileencodings=utf-8,cp949
 " set langmenu=cp949
 " set termencoding=euc-kr
@@ -465,8 +511,8 @@ set fileencodings=utf-8,cp949
 " language messages en_US.UTF-8
 
 " set enc=utf-8
-set fenc=utf-8
-set fencs=ucs-bom,utf-8,cp949,latin1
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf-8,cp949,latin1
 set nobomb
 
 " let $LANG = 'ko_KR.UTF-8'
@@ -528,11 +574,11 @@ function! ToggleCursorColumn()
   if &cursorcolumn == 1
     set cursorcolumn!
     set cursorline!
-    echo "cursorcolumn/cursorline disabled"
+    echo 'cursorcolumn/cursorline disabled'
   else
     set cursorcolumn
     set cursorline
-    echo "cursorcolumn/cursorline enabled"
+    echo 'cursorcolumn/cursorline enabled'
   endif
 endfunction
 " }}}
@@ -545,7 +591,7 @@ nnoremap <leader>q :call QuickFixToggleC()<cr>
 function! QuickFixToggleC()
     for l:i in range(1, winnr('$'))
         let l:bnum = winbufnr(l:i)
-        if getbufvar(bnum, '&buftype') == 'quickfix'
+        if getbufvar(bnum, '&buftype') ==? 'quickfix'
             cclose
             return
         endif
@@ -580,7 +626,7 @@ nnoremap <Space>k :cprevious<cr>
 
 "  외부 인터프린터 언어 인터페이스 설정       {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
-if has("win32")
+if has('win32')
     let &pythonthreedll=$HOME . '\vimfiles\interpreters\python3.6\python36.dll'
     let &rubydll=$HOME . '\vimfiles\interpreters\ruby2.2.6\bin\msvcrt-ruby220.dll'
     let &luadll=$HOME . '\vimfiles\interpreters\lua5.3.3\lua53.dll'
@@ -590,14 +636,14 @@ endif
 " Menu, ScrollBar, ToolBar 설정              {{{
 " """"""""""""""""""""""""""""""""""""""""""""""
 " Menu, ScrollBar, ToolBar 모두 없앤다.
-let &guioptions="g"
+let &guioptions='g'
 
 " Menu, ScrollBar, ToolBar 표시/숨기기 토글 함수
 function! ToggleMenuScrollBarToolBar()
-    if &guioptions ==# "g"
-        let &guioptions = "gmrLtT"
+    if &guioptions ==# 'g'
+        let &guioptions = 'gmrLtT'
     else
-        let &guioptions = "g"
+        let &guioptions = 'g'
     endif
 endfunction
 "}}}
@@ -701,7 +747,7 @@ nnoremap <Leader>vz :call VimuxZoomRunner()<CR>
 " If text is selected, save it in the v buffer and send that buffer it to tmux
 function! VimuxSlime()
       call VimuxSendText(@v)
-      call VimuxSendKeys("Enter")
+      call VimuxSendKeys('Enter')
 endfunction
 
 vnoremap <Leader>vs "vy :call VimuxSlime()<CR>
@@ -710,10 +756,10 @@ vnoremap <Leader>vs "vy :call VimuxSlime()<CR>
 nnoremap <C-s>b vip"vy:call VimuxSlime()<CR>
 nnoremap <C-s>f ggVG"vy:call VimuxSlime()<CR>
 
-let g:VimuxHeight = "5"
+let g:VimuxHeight = '5'
 
-let g:VimuxRunnerType = "pane"
-" let g:VimuxRunnerType = "window"
+let g:VimuxRunnerType = 'pane'
+" let g:VimuxRunnerType = 'window'
 " }}}
 
 " LanguageClient : LanguageClient-neovim, vim-lsp 설정{{{
@@ -761,7 +807,7 @@ let g:LanguageClient_autoStart = 1
 " let g:SuperTabDefaultCompletionType = '<c-x><c-n>'
 " let g:SuperTabDefaultCompletionType = '<c-x><c-u>'
 let g:SuperTabDefaultCompletionType = 'context'
-let g:SuperTabContextDefaultCompletionType = "<c-x><c-o>"
+let g:SuperTabContextDefaultCompletionType = '<c-x><c-o>'
 
 " if has("gui_running")
 "   imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
@@ -843,9 +889,9 @@ augroup filetype_scala
     " autocmd FileType scala nnoremap <buffer> <C-s><C-f> mvgg=G4x`v:write<CR>
     autocmd FileType scala nnoremap <silent> <buffer> <C-s><C-f> :write<CR>:!ng scalafmt % --config ~/.scalafmt.conf<CR><CR>:edit!<CR>
     autocmd FileType scala inoremap <silent> <buffer> <C-s><C-f> <Esc>:write<CR>:!ng scalafmt % --config ~/.scalafmt.conf<CR><CR>:edit!<CR>
+    autocmd BufEnter *.scala setl formatprg=scalafmt\ --config\ $HOME/.scalafmt.conf\ --stdin
+    autocmd BufEnter *.scala setl equalprg=scalafmt\ --config\ $HOME/.scalafmt.conf\ --stdin
 augroup END
-autocmd BufEnter *.scala setl formatprg=scalafmt\ --config\ $HOME/.scalafmt.conf\ --stdin
-autocmd BufEnter *.scala setl equalprg=scalafmt\ --config\ $HOME/.scalafmt.conf\ --stdin
 " autocmd FileType scala setlocal omnifunc=LanguageClient#complete
 " autocmd FileType scala setlocal completefunc=LanguageClient#complete
 " autocmd FileType scala setlocal omnifunc=EnCompleteFunc
@@ -853,17 +899,20 @@ autocmd BufEnter *.scala setl equalprg=scalafmt\ --config\ $HOME/.scalafmt.conf\
 
 " fzf                                         {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
-nnoremap <Space>f :Files<cr>
-nnoremap <M-f> :Files<cr>
-nnoremap <Space>l :Lines<cr>
-nnoremap <M-l> :Lines<cr>
-nnoremap <Space>b :Buffers<cr>
-nnoremap <M-b> :Buffers<cr>
+nnoremap <Space>ff :Files<cr>
+" nnoremap <M-f> :Files<cr>
+" nnoremap <Space>l :Lines<cr>
+" nnoremap <M-l> :Lines<cr>
+nnoremap <Space>bb :Buffers<cr>
+" nnoremap <M-b> :Buffers<cr>
 " }}}
 
 " python : jedi                               {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
-autocmd FileType python setlocal completeopt-=preview
+augroup filetype_python
+    autocmd!
+    autocmd FileType python setlocal completeopt-=preview
+augroup END
 let g:ale_python_pylint_executable = 'pylint-3'
 let g:jedi#force_py_version=3
 " }}}
@@ -933,8 +982,8 @@ augroup END
 
 "" sql                                         {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
-let g:sqlfmt_command = "sqlformat"
-let g:sqlfmt_options = "-r -k upper"
+let g:sqlfmt_command = 'sqlformat'
+let g:sqlfmt_options = '-r -k upper'
 
 augroup sql_key_bindings
     autocmd!
