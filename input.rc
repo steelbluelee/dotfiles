@@ -10,8 +10,8 @@ $if mode=vi
     set keymap vi-command
     "gg": beginning-of-history
     "G": end-of-history
-    "H": beginning-of-line
-    "L": end-of-line
+    # "H": beginning-of-line
+    # "L": end-of-line
 
     set keymap vi-insert       #notice how the "jk" movement is
     "jk": vi-movement-mode     #after 'set keymap vi-insert'?

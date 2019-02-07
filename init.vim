@@ -432,6 +432,9 @@ inoremap <C-k> <C-x><C-k>
 nnoremap <Leader>te :tabedit %<CR>
 nnoremap <Leader>tc :tabclose<CR>
 nnoremap <Leader>tn :tabnew<CR>
+
+" 
+inoremap <C-f> <Esc>A
 " }}}
 
 " terminal realted setup                     {{{
