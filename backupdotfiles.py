@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # This app require 'pyfunctional' package
 # You need 'pip3 install pyfunctional --user'
 
