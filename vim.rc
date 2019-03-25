@@ -4,8 +4,13 @@
 " if &shell =~# 'fish$'
 "     set shell=sh
 " endif
+" set pythonthreedll=$HOME . '\scoop\apps\python\current\python3.dll'
+set fileformats=unix,dos
+
 let g:ale_vim_vint_executable='vint'
 let g:dbext_default_profile_dragonStack='type=pgsql:host=localhost:user=node_user:dbname=dragonstack'
+
+set guifont=Source\ Code\ Pro\ for\ Powerline:h12:cANSI
 
 augroup project_dragonstack
     autocmd!
@@ -135,6 +140,7 @@ Plug 'https://github.com/moll/vim-bbye'
 Plug 'https://github.com/jlanzarotta/bufexplorer'
 " Plug 'kassio/neoterm'
 Plug 'https://github.com/szw/vim-maximizer'
+Plug 'ryanoasis/vim-devicons'
 
 " colors
 Plug 'https://github.com/altercation/vim-colors-solarized'
@@ -168,10 +174,10 @@ Plug 'https://github.com/scrooloose/nerdcommenter'
 "     Plug 'roxma/nvim-yarp'
 "     Plug 'roxma/vim-hug-neovim-rpc'
 " endif
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+" Plug 'autozimu/LanguageClient-neovim', {
+"     \ 'branch': 'next',
+"     \ 'do': 'bash install.sh',
+"     \ }
 
 Plug 'https://github.com/lifepillar/vim-mucomplete'
 
@@ -205,6 +211,7 @@ if has('nvim')
 else
     Plug 'ensime/ensime-vim'
 endif
+
 Plug 'https://github.com/derekwyatt/vim-scala'
 Plug 'https://github.com/ktvoelker/sbt-vim'
 
@@ -533,13 +540,24 @@ augroup END
 
 " key binding and sourcing for opening vimrcfile
 " vimrc 파일 열기 & 적용
-if has('nvim')
-    nnoremap <leader>ev :e ~/.config/nvim/init.vim<cr>
-    nnoremap <leader>sv :source ~/.config/nvim/init.vim<cr>
+if has('win32')
+    if has('nvim')
+        nnoremap <leader>ev :e ~/AppData/Local/nvim/init.vim<cr>
+        nnoremap <leader>sv :source ~AppData/Local/nvim/init.vim<cr>
+    else
+        nnoremap <leader>ev :e ~/_vimrc<cr>
+        nnoremap <leader>sv :source ~/_vimrc<cr>
+    endif
 else
-    nnoremap <leader>ev :e ~/.vimrc<cr>
-    nnoremap <leader>sv :source ~/.vimrc<cr>
+    if has('nvim')
+        nnoremap <leader>ev :e ~/.config/nvim/init.vim<cr>
+        nnoremap <leader>sv :source ~/.config/nvim/init.vim<cr>
+    else
+        nnoremap <leader>ev :e ~/.vimrc<cr>
+        nnoremap <leader>sv :source ~/.vimrc<cr>
+    endif
 endif
+
 " }}}
 
 " 들여쓰기, 탭 : indentation, Tab 설정       {{{
@@ -629,10 +647,12 @@ nnoremap <Space>k :cprevious<cr>
 
 "  외부 인터프린터 언어 인터페이스 설정       {{{
 " """""""""""""""""""""""""""""""""""""""""""""""
-if has('win32')
-    let &pythonthreedll=$HOME . '\vimfiles\interpreters\python3.6\python36.dll'
-    let &rubydll=$HOME . '\vimfiles\interpreters\ruby2.2.6\bin\msvcrt-ruby220.dll'
-    let &luadll=$HOME . '\vimfiles\interpreters\lua5.3.3\lua53.dll'
+if has('win32') && !has('nvim')
+     " let &pythonthreedll=$HOME . '\scoop\apps\python\current\python37.dll'
+set pythonthreedll=c:\Users\steel\scoop\apps\python\3.7.2\python37.dll
+set pythondll=C:\Users\steel\scoop\apps\python27\2.7.16\python27.dll
+"     let &rubydll=$HOME . '\vimfiles\interpreters\ruby2.2.6\bin\msvcrt-ruby220.dll'
+"     let &luadll=$HOME . '\vimfiles\interpreters\lua5.3.3\lua53.dll'
 endif
 " }}}
 
@@ -669,11 +689,13 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
+let g:airline_powerline_fonts = 1
+
 " let g:airline_theme='wombat'
-let g:airline_theme='molokai'
+" let g:airline_theme='molokai'
 " let g:airline_theme='papercolor'
 " let g:airline_theme='sol'
-" let g:airline_theme='luna'
+let g:airline_theme='luna'
 " let g:airline_theme='one'
 " let g:airline_theme='base16'
 " }}}
@@ -769,7 +791,7 @@ let g:VimuxRunnerType = 'pane'
 " """""""""""""""""""""""""""""""""""""""""""""""""""""""
 " set signcolumn=yes
 " if has('nvim')
-let g:LanguageClient_autoStart = 1
+" let g:LanguageClient_autoStart = 1
 " let g:LanguageClient_serverCommands = {
 "     \ 'javascript': ['flow-language-server', '--stdio'],
 "     \ 'scala': ['node', expand('~/.bin/sbt-server-stdio.js')],
