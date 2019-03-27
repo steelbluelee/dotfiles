@@ -5,6 +5,8 @@
 "     set shell=sh
 " endif
 " set pythonthreedll=$HOME . '\scoop\apps\python\current\python3.dll'
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+
 set fileformats=unix,dos
 
 let g:ale_vim_vint_executable='vint'

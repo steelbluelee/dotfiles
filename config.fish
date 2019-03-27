@@ -1,9 +1,9 @@
 # ~/.config/fish/config.fish
-set -gx PATH $HOME/.bin $HOME/.local/bin $HOME/.gem/ruby/2.5.0/bin $HOME/go/bin $PATH
+set -gx PATH $HOME/.bin $HOME/.local/bin $PATH
 set -gx EDITOR nvim
 # set fish_key_bindings fish_vi_key_bindings
 set fish_key_bindings fish_user_key_bindings
-bind -M insert \cf forward-char
+# bind -M insert \cf forward-char
 
 set -g theme_display_date no
 
